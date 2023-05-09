@@ -41,5 +41,5 @@ New-Project `
   -DisableTests $DisableTests `
   -DisableUnitTests $DisableUnitTests `
   -DisableIntegrationTests $DisableIntegrationTests `
-  -SolutionFile "###SOLUTION###" `
+  -SolutionFile ".\Http.Correlation.sln" `
   -OutputDirectory (Get-Location)

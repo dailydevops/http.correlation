@@ -25,5 +25,5 @@ jobs:
     with:
       dotnet-logging: ${{ inputs.dotnet-logging }}
       dotnet-version: 7.x
-      solution: ###SOLUTION###
+      solution: .\Http.Correlation.sln
     secrets: inherit
