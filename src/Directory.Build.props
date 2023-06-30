@@ -3,4 +3,18 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   <Import Project="$(DirEngineeringSettings)src.build.props" />
 
+  <PropertyGroup>
+    <RootNamespace>NetEvolve.Http.Correlation</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>NetEvolve.Http.Correlation</Title>
+    <CopyrightYearStart>2023</CopyrightYearStart>
+
+    <PackageProjectUrl>https://github.com/dailydevops/http.correlation</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dailydevops/http.correlation.git</RepositoryUrl>
+
+    <PackageTags>http;tracking;correlation;request id;</PackageTags>
+  </PropertyGroup>
+
 </Project>
