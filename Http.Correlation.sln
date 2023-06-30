@@ -3,12 +3,75 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DCCA63A9-B066-4B95-AD66-20DE5F372403}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+		src\Directory.Packages.props = src\Directory.Packages.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Abstractions", "src\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj", "{7C18B29C-F53E-4603-B8D6-2472200B6BDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{966730BD-654E-4160-B960-1913EAA151CA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Abstractions.Tests.Unit", "tests\NetEvolve.Http.Correlation.Abstractions.Tests.Unit\NetEvolve.Http.Correlation.Abstractions.Tests.Unit.csproj", "{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.AspNetCore", "src\NetEvolve.Http.Correlation.AspNetCore\NetEvolve.Http.Correlation.AspNetCore.csproj", "{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.AspNetCore.Tests.Unit", "tests\NetEvolve.Http.Correlation.AspNetCore.Tests.Unit\NetEvolve.Http.Correlation.AspNetCore.Tests.Unit.csproj", "{8C640784-C1D1-40A8-B01B-BDCE26C14644}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62B80648-E574-40CD-9298-A70E9D1C07C2}"
+	ProjectSection(SolutionItems) = preProject
+		.csharpierignore = .csharpierignore
+		.editorconfig = .editorconfig
+		.filenesting.json = .filenesting.json
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		Directory.Packages.props = Directory.Packages.props
+		Directory.Solution.props = Directory.Solution.props
+		GitVersion.yml = GitVersion.yml
+		LICENSE = LICENSE
+		new-project.ps1 = new-project.ps1
+		nuget.config = nuget.config
+		README.md = README.md
+		update-solution.ps1 = update-solution.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C18B29C-F53E-4603-B8D6-2472200B6BDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C18B29C-F53E-4603-B8D6-2472200B6BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C18B29C-F53E-4603-B8D6-2472200B6BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C18B29C-F53E-4603-B8D6-2472200B6BDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7C18B29C-F53E-4603-B8D6-2472200B6BDA} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
+		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83} = {966730BD-654E-4160-B960-1913EAA151CA}
+		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
+		{8C640784-C1D1-40A8-B01B-BDCE26C14644} = {966730BD-654E-4160-B960-1913EAA151CA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6EA9C0B3-11F7-4677-A2CF-6A4F280BA2A5}
 	EndGlobalSection
 EndGlobal
