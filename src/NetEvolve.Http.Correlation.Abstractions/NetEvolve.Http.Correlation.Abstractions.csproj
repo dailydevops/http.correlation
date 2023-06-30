@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.AspNetCore" />
+    <InternalsVisibleTo Include="NetEvolve.Http.Correlation.Functions" />
   </ItemGroup>
 
   <ItemGroup>
