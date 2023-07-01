@@ -28,7 +28,9 @@ internal sealed class HttpCorrelationMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         string? correlationId = null;
-        if (GetCorrelationIdFromHeader(context, out var correlationIdValues))
+        if (
+            GetCorrelationIdFromHeader(context, out var correlationIdValues, out var usedHeaderName)
+        )
         {
             correlationId = correlationIdValues.FirstOrDefault();
         }
@@ -47,24 +49,15 @@ internal sealed class HttpCorrelationMiddleware
 
         context.Response.OnStarting(() =>
         {
-            if (!context.Response.Headers.ContainsKey(HeaderName1))
+            if (!context.Response.Headers.ContainsKey(usedHeaderName))
             {
-                context.Response.Headers.Add(HeaderName1, correlationId);
-            }
-
-            if (!context.Response.Headers.ContainsKey(HeaderName2))
-            {
-                context.Response.Headers.Add(HeaderName2, correlationId);
+                context.Response.Headers.Add(usedHeaderName, correlationId);
             }
 
             return Task.CompletedTask;
         });
 
-        var scopeProperties = new Dictionary<string, object>
-        {
-            { HeaderName1, correlationId },
-            { HeaderName2, correlationId }
-        };
+        var scopeProperties = new Dictionary<string, object> { { usedHeaderName, correlationId } };
 
         using (_logger.BeginScope(scopeProperties))
         {
@@ -74,14 +67,31 @@ internal sealed class HttpCorrelationMiddleware
 
     private static bool GetCorrelationIdFromHeader(
         HttpContext context,
-        out StringValues correlationId
-    ) =>
-        (
+        out StringValues correlationId,
+        out string usedHeaderName
+    )
+    {
+        usedHeaderName = HeaderName1;
+
+        if (
             context.Request.Headers.TryGetValue(HeaderName1, out correlationId)
             && !StringValues.IsNullOrEmpty(correlationId)
         )
-        || (
+        {
+            return true;
+        }
+
+        if (
             context.Request.Headers.TryGetValue(HeaderName2, out correlationId)
             && !StringValues.IsNullOrEmpty(correlationId)
-        );
+        )
+        {
+            usedHeaderName = HeaderName2;
+            return true;
+        }
+
+        correlationId = default;
+
+        return false;
+    }
 }
