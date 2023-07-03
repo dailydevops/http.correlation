@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.Abstractions;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.Extensions.DependencyInjection;
 

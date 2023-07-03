@@ -10,6 +10,10 @@ public interface IHttpCorrelationAccessor
     /// <summary>
     /// Gets the current Correlation Id from the <see cref="HttpContext"/>.
     /// </summary>
-    /// <returns>Correlation Id</returns>
-    string GetCorrelationId();
+    string CorrelationId { get; }
+
+    /// <summary>
+    /// Gets the header name, which is used.
+    /// </summary>
+    string? HeaderName { get; internal set; }
 }

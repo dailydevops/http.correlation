@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -19,16 +19,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        if (services.BuildServiceProvider().GetService<IHttpCorrelationAccessor>() is not null)
-        {
-            throw new InvalidOperationException(
-                "Services have already been added. Please check your service registration for duplicates."
-            );
-        }
-
         services
             .AddHttpContextAccessor()
-            .TryAddSingleton<IHttpCorrelationAccessor, HttpCorrelationAccessor>();
+            .TryAddScoped<IHttpCorrelationAccessor, HttpCorrelationAccessor>();
 
         return new HttpCorrelationBuilder(services);
     }

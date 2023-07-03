@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
+﻿namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
 
 public class UnitTest1
 {

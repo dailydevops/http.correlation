@@ -1,7 +1,8 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.Http.Correlation;
 using NetEvolve.Http.Correlation.Abstractions;
 using System;
 
@@ -19,11 +20,14 @@ public static class ApplicationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(app);
 
-        if (app.ApplicationServices.GetService<IHttpCorrelationAccessor>() is null)
+        using (var scopedServices = app.ApplicationServices.CreateScope())
         {
-            throw new InvalidOperationException(
-                $"The required services for this function were not found. Please run `services.{nameof(ServiceCollectionExtensions.AddHttpCorrelation)}()` in advance."
-            );
+            if (scopedServices.ServiceProvider.GetService<IHttpCorrelationAccessor>() is null)
+            {
+                throw new InvalidOperationException(
+                    $"The required services for this function were not found. Please run `services.{nameof(ServiceCollectionExtensions.AddHttpCorrelation)}()` in advance."
+                );
+            }
         }
 
         return app.UseMiddleware<HttpCorrelationMiddleware>();
