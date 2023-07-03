@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.AspNetCore.Http;
 using NetEvolve.Http.Correlation.Abstractions;

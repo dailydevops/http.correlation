@@ -1,9 +1,19 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
+
+/* Unmerged change from project 'NetEvolve.Http.Correlation.AspNetCore (net7.0)'
+Before:
+using NetEvolve.Http.Correlation.Abstractions;
+After:
+using NetEvolve;
+using NetEvolve.Http;
+using NetEvolve.Http.Correlation;
+using NetEvolve.Http.Correlation.Abstractions;
+*/
 using NetEvolve.Http.Correlation.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +47,7 @@ internal sealed class HttpCorrelationMiddleware
 
         if (string.IsNullOrWhiteSpace(correlationId))
         {
-            var correlationIdGenerator =
-                context.RequestServices.GetService<IHttpCorrelationIdProvider>();
-
-            correlationId = correlationIdGenerator is null
-                ? context.TraceIdentifier
-                : correlationIdGenerator.GenerateId();
+            correlationId = GeneratedCorrelationId(context);
         }
 
         context.TraceIdentifier = correlationId;
@@ -63,6 +68,16 @@ internal sealed class HttpCorrelationMiddleware
         {
             await _next(context).ConfigureAwait(false);
         }
+    }
+
+    private static string GeneratedCorrelationId(HttpContext context)
+    {
+        var correlationIdGenerator =
+            context.RequestServices.GetService<IHttpCorrelationIdProvider>();
+
+        return correlationIdGenerator is null
+            ? context.TraceIdentifier
+            : correlationIdGenerator.GenerateId();
     }
 
     private static bool GetCorrelationIdFromHeader(

@@ -1,7 +1,8 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.Http.Correlation;
 using NetEvolve.Http.Correlation.Abstractions;
 using System;
 
