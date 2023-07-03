@@ -8,6 +8,7 @@ using System;
 internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private string? _headerName;
 
     public HttpCorrelationAccessor(IHttpContextAccessor httpContextAccessor)
     {
@@ -20,5 +21,12 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
     }
 
     /// <inheritdoc />
-    public string GetCorrelationId() => _httpContextAccessor.HttpContext!.TraceIdentifier;
+    public string CorrelationId => _httpContextAccessor.HttpContext!.TraceIdentifier;
+
+    /// <inheritdoc />
+    public string? HeaderName
+    {
+        get => _headerName;
+        set => _headerName = value;
+    }
 }

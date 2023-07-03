@@ -2,7 +2,6 @@
 
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.Http.Correlation.Abstractions;
-using NetEvolve.Http.Correlation.Generators;
 using System;
 
 /// <summary>
@@ -11,17 +10,28 @@ using System;
 public static class HttpCorrelationBuilderExtensions
 {
     /// <summary>
-    /// Adds a <see cref="GuidCorrelationIdProvider"/>.
+    /// Adds a <see cref="TestGeneratorCorrelationIdProvider"/>.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpCorrelationBuilder"/> instance.</param>
+    /// <param name="generatedTestId"></param>
     /// <returns>The <see cref="IHttpCorrelationBuilder"/> instance.</returns>
-    public static IHttpCorrelationBuilder WithGuidGenerator(this IHttpCorrelationBuilder builder)
+    public static IHttpCorrelationBuilder WithTestGenerator(
+        this IHttpCorrelationBuilder builder,
+        string? generatedTestId = default
+    )
     {
         ArgumentNullException.ThrowIfNull(builder);
 
+        if (string.IsNullOrWhiteSpace(generatedTestId))
+        {
+            generatedTestId = TestGeneratorCorrelationIdProvider.GeneratedTestId;
+        }
+
         builder.Services
             .RemoveAll<IHttpCorrelationIdProvider>()
-            .TryAddSingleton<IHttpCorrelationIdProvider, GuidCorrelationIdProvider>();
+            .TryAddSingleton<IHttpCorrelationIdProvider>(
+                new TestGeneratorCorrelationIdProvider(generatedTestId)
+            );
 
         return builder;
     }

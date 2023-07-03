@@ -7,12 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DCCA63A9-B06
 	ProjectSection(SolutionItems) = preProject
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Build.targets = src\Directory.Build.targets
-		src\Directory.Packages.props = src\Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Abstractions", "src\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj", "{7C18B29C-F53E-4603-B8D6-2472200B6BDA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{966730BD-654E-4160-B960-1913EAA151CA}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+		tests\Directory.Build.targets = tests\Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Abstractions.Tests.Unit", "tests\NetEvolve.Http.Correlation.Abstractions.Tests.Unit\NetEvolve.Http.Correlation.Abstractions.Tests.Unit.csproj", "{4EFF3E51-F944-4E6C-9AE8-649BD786AE83}"
 EndProject
@@ -39,6 +42,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		update-solution.ps1 = update-solution.ps1
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.TestGenerator", "src\NetEvolve.Http.Correlation.TestGenerator\NetEvolve.Http.Correlation.TestGenerator.csproj", "{5A80C23A-88A0-45D1-86B8-A3DF11D9E019}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.TestGenerator.Tests.Unit", "tests\NetEvolve.Http.Correlation.TestGenerator.Tests.Unit\NetEvolve.Http.Correlation.TestGenerator.Tests.Unit.csproj", "{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.HttpClient", "src\NetEvolve.Http.Correlation.HttpClient\NetEvolve.Http.Correlation.HttpClient.csproj", "{6A992CD1-15F8-4BC3-98E6-0492C638C2D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.HttpClient.Tests.Unit", "tests\NetEvolve.Http.Correlation.HttpClient.Tests.Unit\NetEvolve.Http.Correlation.HttpClient.Tests.Unit.csproj", "{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +72,22 @@ Global
 		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C640784-C1D1-40A8-B01B-BDCE26C14644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A80C23A-88A0-45D1-86B8-A3DF11D9E019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A80C23A-88A0-45D1-86B8-A3DF11D9E019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A80C23A-88A0-45D1-86B8-A3DF11D9E019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A80C23A-88A0-45D1-86B8-A3DF11D9E019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +97,10 @@ Global
 		{4EFF3E51-F944-4E6C-9AE8-649BD786AE83} = {966730BD-654E-4160-B960-1913EAA151CA}
 		{9A7A30BC-C2CB-4164-AE78-BAE32B22B9AB} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
 		{8C640784-C1D1-40A8-B01B-BDCE26C14644} = {966730BD-654E-4160-B960-1913EAA151CA}
+		{5A80C23A-88A0-45D1-86B8-A3DF11D9E019} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
+		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3} = {966730BD-654E-4160-B960-1913EAA151CA}
+		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
+		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC} = {966730BD-654E-4160-B960-1913EAA151CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EA9C0B3-11F7-4677-A2CF-6A4F280BA2A5}
