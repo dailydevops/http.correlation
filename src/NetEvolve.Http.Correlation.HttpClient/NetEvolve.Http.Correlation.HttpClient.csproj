@@ -4,6 +4,13 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Description>
+      Implementation of Http correlation handler to forward CorrelationId. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.
+    </Description>
+    <PackageTags>$(PackageTags)httpclient</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

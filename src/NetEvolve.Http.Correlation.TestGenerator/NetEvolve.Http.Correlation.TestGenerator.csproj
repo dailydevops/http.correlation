@@ -4,6 +4,13 @@
     <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Description>
+      Implementation of an IHttpCorrelationIdProvider for test cases. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.
+    </Description>
+    <PackageTags>$(PackageTags)test</PackageTags>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
