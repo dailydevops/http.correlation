@@ -50,6 +50,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.HttpClient.Tests.Unit", "tests\NetEvolve.Http.Correlation.HttpClient.Tests.Unit\NetEvolve.Http.Correlation.HttpClient.Tests.Unit.csproj", "{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Functions", "src\NetEvolve.Http.Correlation.Functions\NetEvolve.Http.Correlation.Functions.csproj", "{4D933E7A-4828-4BAA-AE47-CE032D5B8973}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Functions.Tests.Unit", "tests\NetEvolve.Http.Correlation.Functions.Tests.Unit\NetEvolve.Http.Correlation.Functions.Tests.Unit.csproj", "{20994B9E-C3F1-4400-AB82-B569753BB17F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +92,14 @@ Global
 		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D933E7A-4828-4BAA-AE47-CE032D5B8973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D933E7A-4828-4BAA-AE47-CE032D5B8973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D933E7A-4828-4BAA-AE47-CE032D5B8973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D933E7A-4828-4BAA-AE47-CE032D5B8973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20994B9E-C3F1-4400-AB82-B569753BB17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20994B9E-C3F1-4400-AB82-B569753BB17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20994B9E-C3F1-4400-AB82-B569753BB17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20994B9E-C3F1-4400-AB82-B569753BB17F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +113,8 @@ Global
 		{AB2142E3-0EB7-4E37-B3D7-CF11B540A9B3} = {966730BD-654E-4160-B960-1913EAA151CA}
 		{6A992CD1-15F8-4BC3-98E6-0492C638C2D8} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
 		{15F2CFB5-C89E-4F93-86E8-F20B98DDC7AC} = {966730BD-654E-4160-B960-1913EAA151CA}
+		{4D933E7A-4828-4BAA-AE47-CE032D5B8973} = {DCCA63A9-B066-4B95-AD66-20DE5F372403}
+		{20994B9E-C3F1-4400-AB82-B569753BB17F} = {966730BD-654E-4160-B960-1913EAA151CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EA9C0B3-11F7-4677-A2CF-6A4F280BA2A5}
