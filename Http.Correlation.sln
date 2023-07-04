@@ -57,11 +57,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{A85D3A46-4B31-4451-B7CE-4CCD59A5A903}"
 	ProjectSection(SolutionItems) = preProject
 		sample\Directory.Build.props = sample\Directory.Build.props
+		sample\Directory.Packages.props = sample\Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.WebApi.NET7", "sample\Sample.WebApi.NET7\Sample.WebApi.NET7.csproj", "{EB620E13-40E6-4147-95BE-34F26FB67A6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.WebApi.NET7", "sample\Sample.WebApi.NET7\Sample.WebApi.NET7.csproj", "{EB620E13-40E6-4147-95BE-34F26FB67A6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.WebApi.NET6", "sample\Sample.WebApi.NET6\Sample.WebApi.NET6.csproj", "{033D1201-E3EB-4AD6-AF81-FDE2330ED0F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.WebApi.NET6", "sample\Sample.WebApi.NET6\Sample.WebApi.NET6.csproj", "{033D1201-E3EB-4AD6-AF81-FDE2330ED0F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
