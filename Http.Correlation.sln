@@ -54,6 +54,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetEvolve.Http.Correlation.Functions.Tests.Unit", "tests\NetEvolve.Http.Correlation.Functions.Tests.Unit\NetEvolve.Http.Correlation.Functions.Tests.Unit.csproj", "{20994B9E-C3F1-4400-AB82-B569753BB17F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{A85D3A46-4B31-4451-B7CE-4CCD59A5A903}"
+	ProjectSection(SolutionItems) = preProject
+		sample\Directory.Build.props = sample\Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
