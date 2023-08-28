@@ -2,19 +2,19 @@
 
 using NetEvolve.Http.Correlation.Abstractions;
 using System;
-using System.Security.Cryptography;
+using System.Diagnostics.CodeAnalysis;
 
 /// <inheritdoc cref="IHttpCorrelationIdProvider" />
 internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdProvider
 {
     private readonly SequentialType _sequentialType;
-    private static readonly RandomNumberGenerator _randomNumberGenerator =
-        RandomNumberGenerator.Create();
+    private static readonly Random _random = Random.Shared;
 
     public SequentialGuidCorrelationIdProvider(SequentialType sequentialType) =>
         _sequentialType = sequentialType;
 
     /// <inheritdoc />
+    [SuppressMessage("Security", "CA5394:Do not use insecure randomness", Justification = "As designed.")]
     public string GenerateId()
     {
         var timeStamp = DateTime.UtcNow.Ticks / 10000L;
@@ -26,7 +26,7 @@ internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdPr
         }
 
         Span<byte> guidBytes = stackalloc byte[16];
-        _randomNumberGenerator.GetBytes(guidBytes);
+        _random.NextBytes(guidBytes);
 
         switch (_sequentialType)
         {
