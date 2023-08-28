@@ -32,22 +32,18 @@ internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdPr
         {
             case SequentialType.Sequantial1:
             case SequentialType.Sequantial2:
-            {
-                timeStampBytes.Slice(2, 6).CopyTo(guidBytes.Slice(0, 6));
+                timeStampBytes[2..8].CopyTo(guidBytes[..6]);
 
                 if (_sequentialType == SequentialType.Sequantial2 && BitConverter.IsLittleEndian)
                 {
-                    guidBytes.Slice(0, 4).Reverse();
-                    guidBytes.Slice(4, 2).Reverse();
+                    guidBytes[..4].Reverse();
+                    guidBytes[4..6].Reverse();
                 }
 
                 break;
-            }
             case SequentialType.Sequantial3:
-            {
-                timeStampBytes.Slice(2, 6).CopyTo(guidBytes.Slice(10, 6));
+                timeStampBytes[2..8].CopyTo(guidBytes[10..16]);
                 break;
-            }
         }
 
         return new Guid(guidBytes).ToString("N");
