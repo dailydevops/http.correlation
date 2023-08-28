@@ -11,10 +11,7 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
 
     public HttpCorrelationAccessor(IHttpContextAccessor httpContextAccessor)
     {
-        if (httpContextAccessor is null)
-        {
-            throw new ArgumentNullException(nameof(httpContextAccessor));
-        }
+        ArgumentNullException.ThrowIfNull(httpContextAccessor);
 
         _httpContextAccessor = httpContextAccessor;
     }
