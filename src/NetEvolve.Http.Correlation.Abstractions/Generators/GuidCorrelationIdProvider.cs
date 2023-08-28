@@ -3,7 +3,7 @@
 using NetEvolve.Http.Correlation.Abstractions;
 using System;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IHttpCorrelationIdProvider" />
 internal sealed class GuidCorrelationIdProvider : IHttpCorrelationIdProvider
 {
     /// <inheritdoc />

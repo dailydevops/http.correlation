@@ -25,4 +25,17 @@ public static class HttpCorrelationBuilderExtensions
 
         return builder;
     }
+
+    public static IHttpCorrelationBuilder WithSequentialGuidGenerator(
+        this IHttpCorrelationBuilder builder
+    )
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+
+        builder.Services
+            .RemoveAll<IHttpCorrelationIdProvider>()
+            .TryAddSingleton<IHttpCorrelationIdProvider, SequentialGuidCorrelationIdProvider>();
+
+        return builder;
+    }
 }

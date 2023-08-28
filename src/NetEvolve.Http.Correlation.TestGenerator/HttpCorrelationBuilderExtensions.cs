@@ -22,11 +22,6 @@ public static class HttpCorrelationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        if (string.IsNullOrWhiteSpace(generatedTestId))
-        {
-            generatedTestId = TestGeneratorCorrelationIdProvider.GeneratedTestId;
-        }
-
         builder.Services
             .RemoveAll<IHttpCorrelationIdProvider>()
             .TryAddSingleton<IHttpCorrelationIdProvider>(
