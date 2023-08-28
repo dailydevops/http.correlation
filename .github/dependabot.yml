@@ -8,23 +8,40 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      # Check for updates to GitHub Actions every weekday
       interval: "weekly"
     commit-message:
       prefix: "build(ci)"
     labels:
-      - "dependency"
-  - package-ecosystem: "nuget" # See documentation for possible values
+      - "dependency-actions"
+
+  - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "daily"
     commit-message:
       prefix: "build(deps)"
     labels:
-      - "dependency"
+      - "dependency-nuget"
+    open-pull-requests-limit: 20
+    groups:
+      coverlet:
+        patterns:
+          - "coverlet*"
+      testcontainers:
+        patterns:
+          - "testcontainers*"
+      verify:
+        patterns:
+          - "verify*"
+      xunit:
+        patterns:
+          - "xunit*"
+
   - package-ecosystem: "gitsubmodule"
     directory: "/"
     schedule:
       interval: "daily"
     commit-message:
       prefix: "build(mods)"
+    labels:
+      - "dependency-gitmodule"
