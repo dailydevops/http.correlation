@@ -28,7 +28,11 @@ internal sealed class HttpCorrelationMiddleware
     {
         string? correlationId = null;
         if (
-            GetCorrelationIdFromHeader(context, out var correlationIdValues, out var usedHeaderName)
+            GetCorrelationIdFromHeader(
+                context.Request,
+                out var correlationIdValues,
+                out var usedHeaderName
+            )
         )
         {
             correlationId = correlationIdValues.FirstOrDefault();
@@ -36,7 +40,7 @@ internal sealed class HttpCorrelationMiddleware
 
         if (string.IsNullOrWhiteSpace(correlationId))
         {
-            correlationId = GeneratedCorrelationId(context);
+            correlationId = GenerateCorrelationId(context);
         }
 
         context.TraceIdentifier = correlationId;
@@ -53,8 +57,11 @@ internal sealed class HttpCorrelationMiddleware
                 return Task.CompletedTask;
             });
 
-        var accessor = context.RequestServices.GetService<IHttpCorrelationAccessor>()!;
-        accessor.HeaderName = usedHeaderName;
+        var accessor = context.RequestServices.GetService<IHttpCorrelationAccessor>();
+        if (accessor is not null)
+        {
+            accessor.HeaderName = usedHeaderName;
+        }
 
         var scopeProperties = new Dictionary<string, object> { { usedHeaderName, correlationId } };
 
@@ -64,7 +71,7 @@ internal sealed class HttpCorrelationMiddleware
         }
     }
 
-    private static string GeneratedCorrelationId(HttpContext context)
+    private static string GenerateCorrelationId(HttpContext context)
     {
         var correlationIdGenerator = context
             .RequestServices
@@ -76,7 +83,7 @@ internal sealed class HttpCorrelationMiddleware
     }
 
     private static bool GetCorrelationIdFromHeader(
-        HttpContext context,
+        HttpRequest request,
         out StringValues correlationId,
         out string usedHeaderName
     )
@@ -84,7 +91,7 @@ internal sealed class HttpCorrelationMiddleware
         usedHeaderName = HeaderName1;
 
         if (
-            context.Request.Headers.TryGetValue(HeaderName1, out correlationId)
+            request.Headers.TryGetValue(HeaderName1, out correlationId)
             && !StringValues.IsNullOrEmpty(correlationId)
         )
         {
@@ -92,7 +99,7 @@ internal sealed class HttpCorrelationMiddleware
         }
 
         if (
-            context.Request.Headers.TryGetValue(HeaderName2, out correlationId)
+            request.Headers.TryGetValue(HeaderName2, out correlationId)
             && !StringValues.IsNullOrEmpty(correlationId)
         )
         {
