@@ -2,5 +2,5 @@
 
 public class SequentialGuidOptions
 {
-    public SequentialType SequentialType { get; internal set; }
+    public SequentialType SequentialType { get; set; }
 }

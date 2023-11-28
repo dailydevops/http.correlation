@@ -27,7 +27,8 @@ public static class HttpCorrelationBuilderExtensions
     }
 
     public static IHttpCorrelationBuilder WithSequentialGuidGenerator(
-        this IHttpCorrelationBuilder builder
+        this IHttpCorrelationBuilder builder,
+        Action<SequentialGuidOptions>? options = null
     )
     {
         ArgumentNullException.ThrowIfNull(builder);

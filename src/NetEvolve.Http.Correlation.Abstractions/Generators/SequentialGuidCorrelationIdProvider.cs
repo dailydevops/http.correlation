@@ -37,12 +37,12 @@ internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdPr
 
         switch (option.SequentialType)
         {
-            case SequentialType.Sequantial1:
-            case SequentialType.Sequantial2:
+            case SequentialType.AsBinary:
+            case SequentialType.AsString:
                 timeStampBytes[2..8].CopyTo(guidBytes[..6]);
 
                 if (
-                    option.SequentialType == SequentialType.Sequantial2
+                    option.SequentialType == SequentialType.AsString
                     && BitConverter.IsLittleEndian
                 )
                 {
@@ -51,7 +51,7 @@ internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdPr
                 }
 
                 break;
-            case SequentialType.Sequantial3:
+            case SequentialType.AtEnd:
                 timeStampBytes[2..8].CopyTo(guidBytes[10..16]);
                 break;
         }
