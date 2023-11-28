@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
+using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.Http.Correlation.Abstractions;
-using System;
 
 /// <summary>
 /// <see cref="IHttpCorrelationBuilder"/> Extensions.
@@ -27,7 +27,8 @@ public static class HttpCorrelationBuilderExtensions
             generatedTestId = TestGeneratorCorrelationIdProvider.GeneratedTestId;
         }
 
-        builder.Services
+        builder
+            .Services
             .RemoveAll<IHttpCorrelationIdProvider>()
             .TryAddSingleton<IHttpCorrelationIdProvider>(
                 new TestGeneratorCorrelationIdProvider(generatedTestId)

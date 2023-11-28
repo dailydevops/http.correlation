@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.Http.Correlation.HttpClient;
 
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 
 /// <summary>
 /// <see cref="IHttpClientBuilder"/> Extensions for <see cref="HttpCorrelationIdHandler"/>.

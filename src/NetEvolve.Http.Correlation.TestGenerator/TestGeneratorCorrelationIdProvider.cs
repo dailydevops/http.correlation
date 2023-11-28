@@ -1,7 +1,7 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
-using NetEvolve.Http.Correlation.Abstractions;
 using System;
+using NetEvolve.Http.Correlation.Abstractions;
 
 /// <inheritdoc />
 internal sealed class TestGeneratorCorrelationIdProvider : IHttpCorrelationIdProvider
