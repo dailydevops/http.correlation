@@ -1,12 +1,12 @@
 <Project>
   <Import Project="$(DirEngineeringSettings)sln.packages.props" />
   <ItemGroup>
-    <GlobalPackageReference Include="CSharpier.MSBuild" Version="0.25.0" />
+    <GlobalPackageReference Include="CSharpier.MSBuild" Version="0.26.3" />
     <GlobalPackageReference Include="GitVersion.MsBuild" Version="5.12.0" />
     <GlobalPackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4" />
-    <GlobalPackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4" />
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.7.30" />
+    <GlobalPackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0" />
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.8.14" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
@@ -15,13 +15,13 @@
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Core" Version="1.13.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
     <PackageVersion Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
-    <PackageVersion Include="Verify.Xunit" Version="20.8.2" />
-    <PackageVersion Include="xunit" Version="2.5.0" />
-    <PackageVersion Include="xunit.core" Version="2.5.0" />
-    <PackageVersion Include="xunit.runner.console" Version="2.5.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Verify.Xunit" Version="22.6.0" />
+    <PackageVersion Include="xunit" Version="2.6.2" />
+    <PackageVersion Include="xunit.core" Version="2.6.2" />
+    <PackageVersion Include="xunit.runner.console" Version="2.6.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4" />
   </ItemGroup>
 </Project>

@@ -1,10 +1,10 @@
 ﻿namespace NetEvolve.Http.Correlation.HttpClient;
 
-using NetEvolve.Http.Correlation.Abstractions;
 using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using NetEvolve.Http.Correlation.Abstractions;
 
 /// <summary>
 /// a <see cref="DelegatingHandler"/> which implements the correlation id support,

@@ -1,8 +1,8 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
+using System;
 using Microsoft.AspNetCore.Http;
 using NetEvolve.Http.Correlation.Abstractions;
-using System;
 
 /// <inheritdoc />
 internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor

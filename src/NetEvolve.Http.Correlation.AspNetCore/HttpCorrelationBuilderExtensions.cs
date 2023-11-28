@@ -1,9 +1,9 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
+using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.Http.Correlation.Abstractions;
 using NetEvolve.Http.Correlation.Generators;
-using System;
 
 /// <summary>
 /// <see cref="IHttpCorrelationBuilder"/> Extensions.
@@ -19,7 +19,8 @@ public static class HttpCorrelationBuilderExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        builder.Services
+        builder
+            .Services
             .RemoveAll<IHttpCorrelationIdProvider>()
             .TryAddSingleton<IHttpCorrelationIdProvider, GuidCorrelationIdProvider>();
 
