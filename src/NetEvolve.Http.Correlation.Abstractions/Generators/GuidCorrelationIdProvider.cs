@@ -3,9 +3,9 @@
 using System;
 using NetEvolve.Http.Correlation.Abstractions;
 
-/// <inheritdoc />
+/// <inheritdoc cref="IHttpCorrelationIdProvider" />
 internal sealed class GuidCorrelationIdProvider : IHttpCorrelationIdProvider
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="IHttpCorrelationIdProvider.GenerateId" />
     public string GenerateId() => Guid.NewGuid().ToString("N");
 }
