@@ -20,8 +20,7 @@ public static class HttpCorrelationBuilderExtensions
         ArgumentNullException.ThrowIfNull(builder);
 
         builder
-            .Services
-            .RemoveAll<IHttpCorrelationIdProvider>()
+            .Services.RemoveAll<IHttpCorrelationIdProvider>()
             .TryAddSingleton<IHttpCorrelationIdProvider, GuidCorrelationIdProvider>();
 
         return builder;
