@@ -41,17 +41,15 @@ internal sealed class HttpCorrelationMiddleware
 
         context.TraceIdentifier = correlationId;
 
-        context
-            .Response
-            .OnStarting(() =>
+        context.Response.OnStarting(() =>
+        {
+            if (!context.Response.Headers.ContainsKey(usedHeaderName))
             {
-                if (!context.Response.Headers.ContainsKey(usedHeaderName))
-                {
-                    context.Response.Headers.Add(usedHeaderName, correlationId);
-                }
+                context.Response.Headers.Append(usedHeaderName, correlationId);
+            }
 
-                return Task.CompletedTask;
-            });
+            return Task.CompletedTask;
+        });
 
         var accessor = context.RequestServices.GetService<IHttpCorrelationAccessor>()!;
         accessor.HeaderName = usedHeaderName;
@@ -66,9 +64,8 @@ internal sealed class HttpCorrelationMiddleware
 
     private static string GeneratedCorrelationId(HttpContext context)
     {
-        var correlationIdGenerator = context
-            .RequestServices
-            .GetService<IHttpCorrelationIdProvider>();
+        var correlationIdGenerator =
+            context.RequestServices.GetService<IHttpCorrelationIdProvider>();
 
         return correlationIdGenerator is null
             ? context.TraceIdentifier
