@@ -11,7 +11,6 @@ internal sealed class TestGeneratorCorrelationIdProvider : IHttpCorrelationIdPro
 
     public TestGeneratorCorrelationIdProvider(string? generatedId)
     {
-        ArgumentNullException.ThrowIfNull(generatedId);
         if (string.IsNullOrWhiteSpace(generatedId))
         {
             generatedId = GeneratedTestId;
