@@ -1,5 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +55,10 @@ internal sealed class HttpCorrelationMiddleware
         var accessor = context.RequestServices.GetService<IHttpCorrelationAccessor>()!;
         accessor.HeaderName = usedHeaderName;
 
-        var scopeProperties = new Dictionary<string, object> { { usedHeaderName, correlationId } };
+        var scopeProperties = new Dictionary<string, object>(StringComparer.Ordinal)
+        {
+            { usedHeaderName, correlationId }
+        };
 
         using (_logger.BeginScope(scopeProperties))
         {
