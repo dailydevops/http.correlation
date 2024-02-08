@@ -16,7 +16,7 @@
     <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="NetEvolve.Extensions.XUnit" Version="1.1.194" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="Verify.Xunit" Version="22.11.5" />
