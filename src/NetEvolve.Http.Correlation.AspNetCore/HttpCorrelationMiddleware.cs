@@ -11,33 +11,26 @@ using Microsoft.Extensions.Primitives;
 using NetEvolve.Http.Correlation.Abstractions;
 using static CorrelationConstants;
 
-internal sealed class HttpCorrelationMiddleware
+internal sealed class HttpCorrelationMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<HttpCorrelationMiddleware> _logger;
 
-    public HttpCorrelationMiddleware(
-        RequestDelegate next,
-        ILogger<HttpCorrelationMiddleware> logger
-    )
-    {
-        _next = next;
-        _logger = logger;
-    }
+    public HttpCorrelationMiddleware(ILogger<HttpCorrelationMiddleware> logger) => _logger = logger;
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(next);
+
         string? correlationId = null;
-        if (
-            GetCorrelationIdFromHeader(context, out var correlationIdValues, out var usedHeaderName)
-        )
+        if (GetIdFromHeader(context, out var idValues, out var usedHeaderName))
         {
-            correlationId = correlationIdValues.FirstOrDefault();
+            correlationId = idValues.FirstOrDefault();
         }
 
         if (string.IsNullOrWhiteSpace(correlationId))
         {
-            correlationId = GeneratedCorrelationId(context);
+            correlationId = GeneratedId(context);
         }
 
         context.TraceIdentifier = correlationId;
@@ -62,11 +55,11 @@ internal sealed class HttpCorrelationMiddleware
 
         using (_logger.BeginScope(scopeProperties))
         {
-            await _next(context).ConfigureAwait(false);
+            await next(context).ConfigureAwait(false);
         }
     }
 
-    private static string GeneratedCorrelationId(HttpContext context)
+    private static string GeneratedId(HttpContext context)
     {
         var correlationIdGenerator =
             context.RequestServices.GetService<IHttpCorrelationIdProvider>();
@@ -76,7 +69,7 @@ internal sealed class HttpCorrelationMiddleware
             : correlationIdGenerator.GenerateId();
     }
 
-    private static bool GetCorrelationIdFromHeader(
+    private static bool GetIdFromHeader(
         HttpContext context,
         out StringValues correlationId,
         out string usedHeaderName

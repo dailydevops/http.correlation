@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Options;
 using NetEvolve.Extensions.XUnit;
 using NetEvolve.Http.Correlation.Generators;
+using NetEvolve.SequentialGuid;
 using NSubstitute;
 using Xunit;
 
@@ -13,10 +14,10 @@ using Xunit;
 public sealed class SequentialGuidCorrelationIdProviderTests
 {
     [Theory]
-    [InlineData(SequentialType.AsBinary)]
-    [InlineData(SequentialType.AsString)]
-    [InlineData(SequentialType.AtEnd)]
-    public void GenerateId_NotEmpty(SequentialType sequentialType)
+    [InlineData(SequentialGuidType.AsBinary)]
+    [InlineData(SequentialGuidType.AsString)]
+    [InlineData(SequentialGuidType.AtEnd)]
+    public void GenerateId_NotEmpty(SequentialGuidType sequentialType)
     {
         // Arrange
         var optionsMonitorMock = Substitute.For<IOptionsMonitor<SequentialGuidOptions>>();
