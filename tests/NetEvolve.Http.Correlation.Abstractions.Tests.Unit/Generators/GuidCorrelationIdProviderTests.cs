@@ -1,13 +1,9 @@
 ﻿namespace NetEvolve.Http.Correlation.Abstractions.Tests.Unit.Generators;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using NetEvolve.Extensions.XUnit;
 using NetEvolve.Http.Correlation.Generators;
 using Xunit;
 
-[ExcludeFromCodeCoverage]
-[UnitTest]
 public class GuidCorrelationIdProviderTests
 {
     [Fact]

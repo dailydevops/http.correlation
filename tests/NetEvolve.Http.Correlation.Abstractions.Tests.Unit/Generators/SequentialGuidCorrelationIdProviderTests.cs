@@ -1,16 +1,12 @@
 ﻿namespace NetEvolve.Http.Correlation.Abstractions.Tests.Unit.Generators;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Options;
-using NetEvolve.Extensions.XUnit;
 using NetEvolve.Http.Correlation.Generators;
 using NetEvolve.SequentialGuid;
 using NSubstitute;
 using Xunit;
 
-[ExcludeFromCodeCoverage]
-[UnitTest]
 public sealed class SequentialGuidCorrelationIdProviderTests
 {
     [Theory]

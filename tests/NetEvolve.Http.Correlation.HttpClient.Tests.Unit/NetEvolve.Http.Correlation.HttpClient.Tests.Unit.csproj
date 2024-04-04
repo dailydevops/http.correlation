@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.HttpClient\NetEvolve.Http.Correlation.HttpClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="NetEvolve.Extensions.XUnit.UnitTestAttribute" />
+  </ItemGroup>
+
 </Project>

@@ -28,4 +28,8 @@
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="NetEvolve.Extensions.XUnit.UnitTestAttribute" />
+  </ItemGroup>
+
 </Project>
