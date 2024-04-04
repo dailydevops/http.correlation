@@ -1,6 +1,5 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
-using System;
 using NetEvolve.Http.Correlation.Abstractions;
 
 /// <inheritdoc />
