@@ -7,4 +7,8 @@
 
   <Import Project="$(DirEngineeringSettings)sln.build.props" />
 
+  <PropertyGroup>
+    <_TargetFrameworks>net6.0;net7.0;net8.0</_TargetFrameworks>
+  </PropertyGroup>
+
 </Project>
