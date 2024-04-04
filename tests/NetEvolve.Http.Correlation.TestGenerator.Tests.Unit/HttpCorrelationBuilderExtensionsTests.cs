@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using NetEvolve.Extensions.XUnit;
+using NetEvolve.Http.Correlation.Abstractions;
 using Xunit;
 
 [ExcludeFromCodeCoverage]

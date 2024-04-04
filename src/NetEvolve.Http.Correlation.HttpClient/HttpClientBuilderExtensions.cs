@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.HttpClient;
+﻿namespace NetEvolve.Http.Correlation;
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
