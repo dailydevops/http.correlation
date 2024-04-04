@@ -13,31 +13,31 @@ using static CorrelationConstants;
 
 internal sealed class HttpCorrelationMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<HttpCorrelationMiddleware> _logger;
+    private readonly RequestDelegate _next;
 
     public HttpCorrelationMiddleware(
-        RequestDelegate next,
-        ILogger<HttpCorrelationMiddleware> logger
+        ILogger<HttpCorrelationMiddleware> logger,
+        RequestDelegate next
     )
     {
-        _next = next;
         _logger = logger;
+        _next = next;
     }
 
     public async Task InvokeAsync(HttpContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
+
         string? correlationId = null;
-        if (
-            GetCorrelationIdFromHeader(context, out var correlationIdValues, out var usedHeaderName)
-        )
+        if (GetIdFromHeader(context, out var idValues, out var usedHeaderName))
         {
-            correlationId = correlationIdValues.FirstOrDefault();
+            correlationId = idValues.FirstOrDefault();
         }
 
         if (string.IsNullOrWhiteSpace(correlationId))
         {
-            correlationId = GeneratedCorrelationId(context);
+            correlationId = GeneratedId(context);
         }
 
         context.TraceIdentifier = correlationId;
@@ -66,7 +66,7 @@ internal sealed class HttpCorrelationMiddleware
         }
     }
 
-    private static string GeneratedCorrelationId(HttpContext context)
+    private static string GeneratedId(HttpContext context)
     {
         var correlationIdGenerator =
             context.RequestServices.GetService<IHttpCorrelationIdProvider>();
@@ -76,7 +76,7 @@ internal sealed class HttpCorrelationMiddleware
             : correlationIdGenerator.GenerateId();
     }
 
-    private static bool GetCorrelationIdFromHeader(
+    private static bool GetIdFromHeader(
         HttpContext context,
         out StringValues correlationId,
         out string usedHeaderName

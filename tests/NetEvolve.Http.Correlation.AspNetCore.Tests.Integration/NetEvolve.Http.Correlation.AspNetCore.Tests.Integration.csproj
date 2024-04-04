@@ -9,6 +9,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NetEvolve.Extensions.XUnit" />
     <PackageReference Include="xunit" />
@@ -23,11 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.TestGenerator\NetEvolve.Http.Correlation.TestGenerator.csproj" />
+    <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.AspNetCore\NetEvolve.Http.Correlation.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <AssemblyAttribute Include="NetEvolve.Extensions.XUnit.UnitTestAttribute" />
+    <AssemblyAttribute Include="NetEvolve.Extensions.XUnit.IntegrationTestAttribute" />
   </ItemGroup>
 
 </Project>

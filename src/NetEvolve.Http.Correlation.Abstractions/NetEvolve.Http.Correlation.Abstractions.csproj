@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,12 +13,17 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.AspNetCore" />
+    <InternalsVisibleTo Include="NetEvolve.Http.Correlation.AspNetCore.Tests.Integration" />
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.HttpClient" />
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.TestGenerator" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetEvolve.SequentialGuid" />
   </ItemGroup>
 
 </Project>

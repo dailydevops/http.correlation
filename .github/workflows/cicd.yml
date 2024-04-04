@@ -24,6 +24,10 @@ jobs:
     uses: dailydevops/pipelines/.github/workflows/cicd-dotnet.yml@main
     with:
       dotnet-logging: ${{ inputs.dotnet-logging }}
-      dotnet-version: 7.x
+      dotnet-version: |
+        6.x
+        7.x
+        8.x
+      enableSonarQube: true
       solution: ./Http.Correlation.sln
     secrets: inherit
