@@ -1,6 +1,5 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
-using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +13,8 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
 {
     private readonly IHttpCorrelationAccessor _correlationAccessor;
 
-    public HttpCorrelationIdHandler(IHttpCorrelationAccessor correlationAccessor)
-    {
-        ArgumentNullException.ThrowIfNull(correlationAccessor);
-
+    public HttpCorrelationIdHandler(IHttpCorrelationAccessor correlationAccessor) =>
         _correlationAccessor = correlationAccessor;
-    }
 
     /// <inheritdoc />
     protected override HttpResponseMessage Send(
