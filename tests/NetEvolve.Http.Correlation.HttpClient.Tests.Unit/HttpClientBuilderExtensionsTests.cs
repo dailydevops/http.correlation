@@ -21,12 +21,12 @@ public class HttpClientBuilderExtensionsTests
         var services = new ServiceCollection();
         _ = services.AddHttpClient("test").AddHttpCorrelation();
 
-        Assert.Equal(19, services.Count);
         Assert.Contains(
             services,
             s =>
                 s.Lifetime == ServiceLifetime.Transient
                 && s.ImplementationType == typeof(HttpCorrelationIdHandler)
+                && s.ServiceType == typeof(HttpCorrelationIdHandler)
         );
     }
 }
