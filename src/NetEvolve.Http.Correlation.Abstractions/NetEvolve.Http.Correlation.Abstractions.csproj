@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.AspNetCore" />
+    <InternalsVisibleTo Include="NetEvolve.Http.Correlation.AspNetCore.Tests.Integration" />
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.HttpClient" />
     <InternalsVisibleTo Include="NetEvolve.Http.Correlation.TestGenerator" />
   </ItemGroup>

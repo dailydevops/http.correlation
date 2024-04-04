@@ -11,16 +11,23 @@ using Microsoft.Extensions.Primitives;
 using NetEvolve.Http.Correlation.Abstractions;
 using static CorrelationConstants;
 
-internal sealed class HttpCorrelationMiddleware : IMiddleware
+internal sealed class HttpCorrelationMiddleware
 {
     private readonly ILogger<HttpCorrelationMiddleware> _logger;
+    private readonly RequestDelegate _next;
 
-    public HttpCorrelationMiddleware(ILogger<HttpCorrelationMiddleware> logger) => _logger = logger;
+    public HttpCorrelationMiddleware(
+        ILogger<HttpCorrelationMiddleware> logger,
+        RequestDelegate next
+    )
+    {
+        _logger = logger;
+        _next = next;
+    }
 
-    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
-        ArgumentNullException.ThrowIfNull(next);
 
         string? correlationId = null;
         if (GetIdFromHeader(context, out var idValues, out var usedHeaderName))
@@ -55,7 +62,7 @@ internal sealed class HttpCorrelationMiddleware : IMiddleware
 
         using (_logger.BeginScope(scopeProperties))
         {
-            await next(context).ConfigureAwait(false);
+            await _next(context).ConfigureAwait(false);
         }
     }
 
