@@ -42,7 +42,7 @@ public static class HttpCorrelationBuilderExtensions
 
         builder
             .Services.RemoveAll<IHttpCorrelationIdProvider>()
-            .ConfigureOptions<SequentialGuidOptions>()
+            .ConfigureOptions<SequentialGuidConfigure>()
             .TryAddSingleton<IHttpCorrelationIdProvider, SequentialGuidCorrelationIdProvider>();
 
         if (options is not null)

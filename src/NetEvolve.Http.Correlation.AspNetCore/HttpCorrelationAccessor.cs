@@ -1,6 +1,5 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
-using System;
 using Microsoft.AspNetCore.Http;
 using NetEvolve.Http.Correlation.Abstractions;
 
@@ -9,12 +8,8 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public HttpCorrelationAccessor(IHttpContextAccessor httpContextAccessor)
-    {
-        ArgumentNullException.ThrowIfNull(httpContextAccessor);
-
+    public HttpCorrelationAccessor(IHttpContextAccessor httpContextAccessor) =>
         _httpContextAccessor = httpContextAccessor;
-    }
 
     /// <inheritdoc />
     public string CorrelationId => _httpContextAccessor.HttpContext!.TraceIdentifier;
