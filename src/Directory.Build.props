@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Title>NetEvolve.Http.Correlation</Title>
+    <Title>$(MSBuildProjectName)</Title>
     <CopyrightYearStart>2023</CopyrightYearStart>
 
     <PackageProjectUrl>https://github.com/dailydevops/http.correlation</PackageProjectUrl>
