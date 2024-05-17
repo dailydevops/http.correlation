@@ -29,7 +29,15 @@ param (
   # Parameter help description
   [Parameter(Mandatory = $false)]
   [Switch]
-  $DisableIntegrationTests
+  $DisableIntegrationTests,
+
+  [Parameter(Mandatory = $false)]
+  [Switch]
+  $EnableProjectGrouping,
+
+  [Parameter(Mandatory = $false)]
+  [Switch]
+  $DisableArchitectureTests
 )
 
 . .\eng\scripts\new-project.ps1
@@ -41,5 +49,7 @@ New-Project `
   -DisableTests $DisableTests `
   -DisableUnitTests $DisableUnitTests `
   -DisableIntegrationTests $DisableIntegrationTests `
-  -SolutionFile ".\Http.Correlation.sln" `
-  -OutputDirectory (Get-Location)
+  -SolutionFile "./Http.Correlation.sln" `
+  -OutputDirectory (Get-Location) `
+  -EnableProjectGrouping $EnableProjectGrouping `
+  -DisableArchitectureTests $DisableArchitectureTests

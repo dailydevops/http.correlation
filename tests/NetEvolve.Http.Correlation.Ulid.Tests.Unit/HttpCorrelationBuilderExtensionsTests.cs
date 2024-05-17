@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.TestGenerator.Tests.Unit;
+﻿namespace NetEvolve.Http.Correlation.Ulid.Tests.Unit;
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,32 +8,32 @@ using Xunit;
 public class HttpCorrelationBuilderExtensionsTests
 {
     [Fact]
-    public void WithTestGenerator_BuilderNull_Throws()
+    public void WithUlidGenerator_BuilderNull_Throws()
     {
         // Arrange
         IHttpCorrelationBuilder builder = null!;
 
         // Act / Assert
-        _ = Assert.Throws<ArgumentNullException>("builder", () => builder.WithTestGenerator());
+        _ = Assert.Throws<ArgumentNullException>("builder", () => builder.WithUlidGenerator());
     }
 
     [Fact]
-    public void WithTestGenerator_Builder_ReturnsBuilder()
+    public void WithUlidGenerator_Builder_ReturnsBuilder()
     {
         // Arrange
         var services = new ServiceCollection();
         var builder = new TestHttpCorrelationBuilder(services);
 
         // Act
-        _ = builder.WithTestGenerator();
+        _ = builder.WithUlidGenerator();
 
         // Assert
         Assert.Contains(
             services,
             s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && s.ImplementationInstance is TestGeneratorCorrelationIdProvider
+                s.Lifetime == ServiceLifetime.Singleton
+                && s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                && s.ImplementationType == typeof(UlidCorrelationIdProvider)
         );
     }
 
