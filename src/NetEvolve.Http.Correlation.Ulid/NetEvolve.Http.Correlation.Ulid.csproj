@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>
+      Implementation of an IHttpCorrelationIdProvider for test cases. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.
+    </Description>
+    <PackageTags>$(PackageTags);ulid</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ulid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
