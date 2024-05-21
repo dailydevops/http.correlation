@@ -14,9 +14,7 @@ public static class HttpCorrelationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpCorrelationBuilder"/> instance.</param>
     /// <returns>The <see cref="IHttpCorrelationBuilder"/> instance.</returns>
-    public static IHttpCorrelationBuilder WithUlidGenerator(
-        this IHttpCorrelationBuilder builder
-    )
+    public static IHttpCorrelationBuilder WithUlidGenerator(this IHttpCorrelationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
 
