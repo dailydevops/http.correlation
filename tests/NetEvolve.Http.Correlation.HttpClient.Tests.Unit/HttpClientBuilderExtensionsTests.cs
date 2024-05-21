@@ -1,7 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
 
 using System;
-using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
