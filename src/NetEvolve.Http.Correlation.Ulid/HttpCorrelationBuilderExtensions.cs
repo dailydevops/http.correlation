@@ -13,11 +13,9 @@ public static class HttpCorrelationBuilderExtensions
     /// Adds a <see cref="UlidCorrelationIdProvider"/>.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpCorrelationBuilder"/> instance.</param>
-    /// <param name="generatedTestId"></param>
     /// <returns>The <see cref="IHttpCorrelationBuilder"/> instance.</returns>
     public static IHttpCorrelationBuilder WithUlidGenerator(
-        this IHttpCorrelationBuilder builder,
-        string? generatedTestId = default
+        this IHttpCorrelationBuilder builder
     )
     {
         ArgumentNullException.ThrowIfNull(builder);
