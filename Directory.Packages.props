@@ -19,7 +19,7 @@
     <PackageVersion Update="Microsoft.AspNetCore.TestHost" Version="6.0.26" Condition=" '$(TargetFramework)' == 'net6.0' " />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageVersion Include="NetEvolve.Extensions.XUnit" Version="2.2.12" />
     <PackageVersion Include="NetEvolve.SequentialGuid" Version="1.1.19" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
