@@ -19,6 +19,7 @@
 
     <PackageProjectUrl>https://github.com/dailydevops/http.correlation</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dailydevops/http.correlation.git</RepositoryUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
 
     <PackageTags>http;tracking;correlation;request id;</PackageTags>
 
