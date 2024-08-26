@@ -24,6 +24,6 @@ public class TestGeneratorCorrelationIdProviderTests
             { "Generated_Test_Id", null },
             { "Generated_Test_Id", string.Empty },
             { "Generated_Test_Id", " " },
-            { "HelloWorldID", "HelloWorldID" }
+            { "HelloWorldID", "HelloWorldID" },
         };
 }
