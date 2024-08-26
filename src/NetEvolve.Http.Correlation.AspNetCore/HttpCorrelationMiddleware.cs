@@ -57,7 +57,7 @@ internal sealed class HttpCorrelationMiddleware
 
         var scopeProperties = new Dictionary<string, object>(StringComparer.Ordinal)
         {
-            { usedHeaderName, correlationId }
+            { usedHeaderName, correlationId },
         };
 
         using (_logger.BeginScope(scopeProperties))
