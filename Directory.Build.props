@@ -13,6 +13,11 @@
     <_TargetFrameworks>net6.0;net7.0;net8.0</_TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Workaround, until https://github.com/GitTools/GitVersion/pull/4206 is released -->
+    <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
+  </PropertyGroup>
+
   <PropertyGroup  Condition=" '$(IsTestableProject)' != 'true' " >
     <Title>$(MSBuildProjectName)</Title>
     <CopyrightYearStart>2023</CopyrightYearStart>
