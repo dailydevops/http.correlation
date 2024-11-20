@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>
-      Implementation of an IHttpCorrelationIdProvider based on NuGet package `Ulid`.
-    </Description>
+    <Description>Implementation of an IHttpCorrelationIdProvider based on NuGet package `Ulid`.</Description>
     <PackageTags>$(PackageTags);ulid</PackageTags>
   </PropertyGroup>
 
