@@ -3,7 +3,6 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using NetEvolve.Http.Correlation;
 using NetEvolve.Http.Correlation.Abstractions;
 
 /// <summary>
