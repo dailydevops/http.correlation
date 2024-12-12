@@ -28,18 +28,22 @@ public class HttpCorrelationBuilderExtensionsTests
         var result = builder.WithGuidGenerator().WithGuidGenerator();
 
         // Assert
-        Assert.Contains(
-            services,
-            s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                && s.ImplementationType.FullName.Equals(
-                    "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
-                    StringComparison.Ordinal
-                )
+        Assert.Multiple(
+            () => Assert.NotNull(result),
+            () =>
+                Assert.Contains(
+                    services,
+                    s =>
+                        s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                        && s.Lifetime == ServiceLifetime.Singleton
+                        && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                        && s.ImplementationType.FullName.Equals(
+                            "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
+                            StringComparison.Ordinal
+                        )
+                ),
+            () => Assert.Single(services)
         );
-        _ = Assert.Single(services);
     }
 
     [Fact]
@@ -70,17 +74,21 @@ public class HttpCorrelationBuilderExtensionsTests
             );
 
         // Assert
-        Assert.Contains(
-            services,
-            s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                && s.ImplementationType.FullName.Equals(
-                    "NetEvolve.Http.Correlation.Generators.SequentialGuidCorrelationIdProvider",
-                    StringComparison.Ordinal
-                )
+        Assert.Multiple(
+            () => Assert.NotNull(result),
+            () =>
+                Assert.Contains(
+                    services,
+                    s =>
+                        s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                        && s.Lifetime == ServiceLifetime.Singleton
+                        && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                        && s.ImplementationType.FullName.Equals(
+                            "NetEvolve.Http.Correlation.Generators.SequentialGuidCorrelationIdProvider",
+                            StringComparison.Ordinal
+                        )
+                ),
+            () => Assert.Equal(9, services.Count)
         );
-        Assert.Equal(9, services.Count);
     }
 }

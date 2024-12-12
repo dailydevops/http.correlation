@@ -15,7 +15,7 @@ public abstract class TestBase
     protected const string DefaultPath = "/";
     protected const string InvokePath = "/invoke";
 
-    protected async ValueTask<HttpResponseMessage> RunAsync(
+    protected static async ValueTask<HttpResponseMessage> RunAsync(
         Action<IHttpCorrelationBuilder>? correlationBuilder = null,
         Action<IServiceCollection>? serviceBuilder = null,
         Action<HttpClient>? clientConfiguration = null,
