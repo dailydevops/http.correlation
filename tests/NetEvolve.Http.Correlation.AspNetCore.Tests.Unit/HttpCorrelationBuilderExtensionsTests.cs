@@ -1,6 +1,7 @@
 ﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation.Abstractions;
 using Xunit;
@@ -55,7 +56,9 @@ public class HttpCorrelationBuilderExtensionsTests
         // Act / Assert
         _ = Assert.Throws<ArgumentNullException>(
             "builder",
+#pragma warning disable CS0618 // Obsolete
             () => builder.WithSequentialGuidGenerator()
+#pragma warning restore CS0618 // Obsolete
         );
     }
 
@@ -67,11 +70,13 @@ public class HttpCorrelationBuilderExtensionsTests
         var builder = new HttpCorrelationBuilder(services);
 
         // Act
+#pragma warning disable CS0618 // Obsolete
         var result = builder
             .WithSequentialGuidGenerator()
             .WithSequentialGuidGenerator(options =>
                 options.SequentialType = SequentialGuid.SequentialGuidType.AsBinary
             );
+#pragma warning restore CS0618 // Obsolete
 
         // Assert
         Assert.Multiple(

@@ -22,17 +22,7 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         CancellationToken cancellationToken
     )
     {
-        var correlationId = _correlationAccessor.CorrelationId;
-        var correlationHeader = _correlationAccessor.HeaderName;
-
-        if (
-            !string.IsNullOrWhiteSpace(correlationId)
-            && !string.IsNullOrWhiteSpace(correlationHeader)
-        )
-        {
-            _ = request.Headers.Remove(correlationId);
-            request.Headers.Add(correlationHeader, correlationId);
-        }
+        SetCorrelationId(request);
 
         return base.Send(request, cancellationToken);
     }
@@ -43,6 +33,13 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         CancellationToken cancellationToken
     )
     {
+        SetCorrelationId(request);
+
+        return base.SendAsync(request, cancellationToken);
+    }
+
+    private void SetCorrelationId(HttpRequestMessage request)
+    {
         var correlationId = _correlationAccessor.CorrelationId;
         var correlationHeader = _correlationAccessor.HeaderName;
 
@@ -51,10 +48,8 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
             && !string.IsNullOrWhiteSpace(correlationHeader)
         )
         {
-            _ = request.Headers.Remove(correlationId);
+            _ = request.Headers.Remove(correlationHeader);
             request.Headers.Add(correlationHeader, correlationId);
         }
-
-        return base.SendAsync(request, cancellationToken);
     }
 }
