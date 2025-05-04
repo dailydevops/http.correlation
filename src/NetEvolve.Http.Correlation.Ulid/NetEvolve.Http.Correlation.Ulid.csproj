@@ -1,20 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
-
   <PropertyGroup>
     <Description>Implementation of an IHttpCorrelationIdProvider based on NuGet package `Ulid`.</Description>
     <PackageTags>$(PackageTags);ulid</PackageTags>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Ulid" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
-
 </Project>

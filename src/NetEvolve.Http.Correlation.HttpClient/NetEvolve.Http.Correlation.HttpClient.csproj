@@ -1,20 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
-
   <PropertyGroup>
     <Description>Implementation of Http correlation handler to forward CorrelationId. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.</Description>
     <PackageTags>$(PackageTags)httpclient</PackageTags>
   </PropertyGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
-
 </Project>
