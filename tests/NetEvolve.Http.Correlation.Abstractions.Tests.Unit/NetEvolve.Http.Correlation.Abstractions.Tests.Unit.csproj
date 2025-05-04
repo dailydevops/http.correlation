@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild">
       <PrivateAssets>all</PrivateAssets>
@@ -22,13 +20,10 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="NetEvolve.Extensions.XUnit.UnitTestAttribute" />
   </ItemGroup>
-
 </Project>

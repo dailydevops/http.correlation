@@ -1,25 +1,18 @@
 <Project>
-
   <PropertyGroup>
     <_TargetFrameworks>net6.0;net7.0;net8.0;net9.0</_TargetFrameworks>
   </PropertyGroup>
-
   <PropertyGroup>
     <!-- Workaround, until https://github.com/GitTools/GitVersion/pull/4206 is released -->
     <GitVersionTargetFramework>net8.0</GitVersionTargetFramework>
   </PropertyGroup>
-
-  <PropertyGroup  Condition=" '$(IsTestableProject)' != 'true' " >
+  <PropertyGroup Condition=" '$(IsTestableProject)' != 'true' ">
     <Title>$(MSBuildProjectName)</Title>
     <CopyrightYearStart>2023</CopyrightYearStart>
-
     <PackageProjectUrl>https://github.com/dailydevops/http.correlation</PackageProjectUrl>
     <RepositoryUrl>https://github.com/dailydevops/http.correlation.git</RepositoryUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
-
     <PackageTags>http;tracking;correlation;request id;</PackageTags>
-
     <RootNamespace>NetEvolve.Http.Correlation</RootNamespace>
   </PropertyGroup>
-
 </Project>

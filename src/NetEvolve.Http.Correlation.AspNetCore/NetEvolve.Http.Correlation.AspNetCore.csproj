@@ -1,19 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
-
   <PropertyGroup>
     <Description>Implementation of AspNetCore middleware to use Http.Correlation. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.</Description>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
 </Project>
