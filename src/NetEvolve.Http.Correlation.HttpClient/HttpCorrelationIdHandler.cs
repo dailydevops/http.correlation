@@ -17,10 +17,7 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         _correlationAccessor = correlationAccessor;
 
     /// <inheritdoc />
-    protected override HttpResponseMessage Send(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken
-    )
+    protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         SetCorrelationId(request);
 
@@ -43,10 +40,7 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         var correlationId = _correlationAccessor.CorrelationId;
         var correlationHeader = _correlationAccessor.HeaderName;
 
-        if (
-            !string.IsNullOrWhiteSpace(correlationId)
-            && !string.IsNullOrWhiteSpace(correlationHeader)
-        )
+        if (!string.IsNullOrWhiteSpace(correlationId) && !string.IsNullOrWhiteSpace(correlationHeader))
         {
             _ = request.Headers.Remove(correlationHeader);
             request.Headers.Add(correlationHeader, correlationId);

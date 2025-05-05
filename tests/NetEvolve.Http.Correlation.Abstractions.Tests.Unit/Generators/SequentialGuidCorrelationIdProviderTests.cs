@@ -17,9 +17,7 @@ public sealed class SequentialGuidCorrelationIdProviderTests
     {
         // Arrange
         var optionsMonitorMock = Substitute.For<IOptionsMonitor<SequentialGuidOptions>>();
-        _ = optionsMonitorMock.CurrentValue.Returns(
-            new SequentialGuidOptions { SequentialType = sequentialType }
-        );
+        _ = optionsMonitorMock.CurrentValue.Returns(new SequentialGuidOptions { SequentialType = sequentialType });
         var provider = new SequentialGuidCorrelationIdProvider(optionsMonitorMock);
 
         // Act

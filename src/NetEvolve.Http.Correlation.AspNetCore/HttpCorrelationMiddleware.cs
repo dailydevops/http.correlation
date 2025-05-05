@@ -16,10 +16,7 @@ internal sealed class HttpCorrelationMiddleware
     private readonly ILogger<HttpCorrelationMiddleware> _logger;
     private readonly RequestDelegate _next;
 
-    public HttpCorrelationMiddleware(
-        ILogger<HttpCorrelationMiddleware> logger,
-        RequestDelegate next
-    )
+    public HttpCorrelationMiddleware(ILogger<HttpCorrelationMiddleware> logger, RequestDelegate next)
     {
         _logger = logger;
         _next = next;
@@ -68,19 +65,12 @@ internal sealed class HttpCorrelationMiddleware
 
     private static string GeneratedId(HttpContext context)
     {
-        var correlationIdGenerator =
-            context.RequestServices.GetService<IHttpCorrelationIdProvider>();
+        var correlationIdGenerator = context.RequestServices.GetService<IHttpCorrelationIdProvider>();
 
-        return correlationIdGenerator is null
-            ? context.TraceIdentifier
-            : correlationIdGenerator.GenerateId();
+        return correlationIdGenerator is null ? context.TraceIdentifier : correlationIdGenerator.GenerateId();
     }
 
-    private static bool GetIdFromHeader(
-        HttpContext context,
-        out StringValues correlationId,
-        out string usedHeaderName
-    )
+    private static bool GetIdFromHeader(HttpContext context, out StringValues correlationId, out string usedHeaderName)
     {
         usedHeaderName = HeaderName1;
 

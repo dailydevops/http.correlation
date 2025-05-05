@@ -54,8 +54,7 @@ public class HttpCorrelationBuilderExtensionsTests
         IHttpCorrelationBuilder builder = null!;
 
         // Act / Assert
-        _ = Assert.Throws<ArgumentNullException>(
-            "builder",
+        _ = Assert.Throws<ArgumentNullException>("builder",
 #pragma warning disable CS0618 // Obsolete
             () => builder.WithSequentialGuidGenerator()
 #pragma warning restore CS0618 // Obsolete
