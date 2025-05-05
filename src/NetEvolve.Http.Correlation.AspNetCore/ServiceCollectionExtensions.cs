@@ -19,9 +19,7 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        services
-            .AddHttpContextAccessor()
-            .TryAddScoped<IHttpCorrelationAccessor, HttpCorrelationAccessor>();
+        services.AddHttpContextAccessor().TryAddScoped<IHttpCorrelationAccessor, HttpCorrelationAccessor>();
 
         return new HttpCorrelationBuilder(services);
     }

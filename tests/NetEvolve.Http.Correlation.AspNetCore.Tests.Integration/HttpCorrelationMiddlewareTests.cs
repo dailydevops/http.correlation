@@ -45,16 +45,12 @@ public class HttpCorrelationMiddlewareTests : TestBase
     [InlineData(SequentialGuidType.AsBinary)]
     [InlineData(SequentialGuidType.AsString)]
     [InlineData(SequentialGuidType.AtEnd)]
-    public async Task UseHttpCorrelation_WithSequentialGuidGenerator_Expected(
-        SequentialGuidType sequentialGuidType
-    )
+    public async Task UseHttpCorrelation_WithSequentialGuidGenerator_Expected(SequentialGuidType sequentialGuidType)
     {
         var result = await RunAsync(
 #pragma warning disable CS0618 // Obsolete
             correlationBuilder: builder =>
-            builder.WithSequentialGuidGenerator(options =>
-                options.SequentialType = sequentialGuidType
-            )
+            builder.WithSequentialGuidGenerator(options => options.SequentialType = sequentialGuidType)
 #pragma warning restore CS0618 // Obsolete
         );
         Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
@@ -69,18 +65,12 @@ public class HttpCorrelationMiddlewareTests : TestBase
         var testCorrelationId = Guid.NewGuid().ToString("N");
         var result = await RunAsync(
             clientConfiguration: client =>
-                client.DefaultRequestHeaders.Add(
-                    CorrelationConstants.HeaderName1,
-                    testCorrelationId
-                ),
+                client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName1, testCorrelationId),
             requestPath: InvokePath
         );
 
         Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
-        Assert.Equal(
-            testCorrelationId,
-            result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault()
-        );
+        Assert.Equal(testCorrelationId, result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault());
 
         Assert.Equal(testCorrelationId, await result.Content.ReadAsStringAsync());
     }
@@ -94,9 +84,6 @@ public class HttpCorrelationMiddlewareTests : TestBase
         );
 
         Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName2));
-        Assert.Equal(
-            testCorrelationId,
-            result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault()
-        );
+        Assert.Equal(testCorrelationId, result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault());
     }
 }

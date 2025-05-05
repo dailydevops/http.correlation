@@ -53,9 +53,7 @@ public abstract class TestBase
 
             clientConfiguration?.Invoke(client);
 
-            var response = await client
-                .GetAsync(new Uri(requestPath, UriKind.Relative))
-                .ConfigureAwait(false);
+            var response = await client.GetAsync(new Uri(requestPath, UriKind.Relative)).ConfigureAwait(false);
 
             return response;
         }

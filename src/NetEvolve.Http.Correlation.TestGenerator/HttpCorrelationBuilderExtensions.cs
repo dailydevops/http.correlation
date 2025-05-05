@@ -24,9 +24,7 @@ public static class HttpCorrelationBuilderExtensions
 
         builder
             .Services.RemoveAll<IHttpCorrelationIdProvider>()
-            .TryAddSingleton<IHttpCorrelationIdProvider>(
-                new TestGeneratorCorrelationIdProvider(generatedTestId)
-            );
+            .TryAddSingleton<IHttpCorrelationIdProvider>(new TestGeneratorCorrelationIdProvider(generatedTestId));
 
         return builder;
     }

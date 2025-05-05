@@ -10,6 +10,5 @@ internal sealed class SequentialGuidConfigure : IConfigureOptions<SequentialGuid
 
     public SequentialGuidConfigure(IConfiguration configuration) => _configuration = configuration;
 
-    public void Configure(SequentialGuidOptions options) =>
-        _configuration.Bind($"HttpCorralation:Sequential", options);
+    public void Configure(SequentialGuidOptions options) => _configuration.Bind($"HttpCorralation:Sequential", options);
 }
