@@ -9,10 +9,8 @@ internal sealed class SequentialGuidCorrelationIdProvider : IHttpCorrelationIdPr
 {
     private readonly IOptionsMonitor<SequentialGuidOptions> _options;
 
-    public SequentialGuidCorrelationIdProvider(IOptionsMonitor<SequentialGuidOptions> options) =>
-        _options = options;
+    public SequentialGuidCorrelationIdProvider(IOptionsMonitor<SequentialGuidOptions> options) => _options = options;
 
     /// <inheritdoc />
-    public string GenerateId() =>
-        SequentialGuidFactory.NewGuid(_options.CurrentValue.SequentialType).ToString("N");
+    public string GenerateId() => SequentialGuidFactory.NewGuid(_options.CurrentValue.SequentialType).ToString("N");
 }
