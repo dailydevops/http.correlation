@@ -1,5 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,18 +22,26 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
     {
         SetCorrelationId(request);
 
-        return base.Send(request, cancellationToken);
+        var response = base.Send(request, cancellationToken);
+
+        SetCorrelationId(response);
+
+        return response;
     }
 
     /// <inheritdoc />
-    protected override Task<HttpResponseMessage> SendAsync(
+    protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken
     )
     {
         SetCorrelationId(request);
 
-        return base.SendAsync(request, cancellationToken);
+        var respose = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+
+        SetCorrelationId(respose);
+
+        return respose;
     }
 
     private void SetCorrelationId(HttpRequestMessage request)
@@ -40,10 +49,20 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         var correlationId = _correlationAccessor.CorrelationId;
         var correlationHeader = _correlationAccessor.HeaderName;
 
-        if (!string.IsNullOrWhiteSpace(correlationId) && !string.IsNullOrWhiteSpace(correlationHeader))
+        if (!request.Headers.Contains(correlationHeader))
         {
-            _ = request.Headers.Remove(correlationHeader);
             request.Headers.Add(correlationHeader, correlationId);
+        }
+    }
+
+    private void SetCorrelationId(HttpResponseMessage respose)
+    {
+        var correlationId = _correlationAccessor.CorrelationId;
+        var correlationHeader = _correlationAccessor.HeaderName;
+
+        if (!respose.Headers.Contains(correlationHeader))
+        {
+            respose.Headers.Add(correlationHeader, correlationId);
         }
     }
 }

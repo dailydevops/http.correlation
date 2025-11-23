@@ -15,5 +15,5 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
     public string CorrelationId => _httpContextAccessor.HttpContext!.TraceIdentifier;
 
     /// <inheritdoc />
-    public string? HeaderName { get; set; }
+    public string HeaderName { get; set; } = CorrelationConstants.HeaderName1;
 }

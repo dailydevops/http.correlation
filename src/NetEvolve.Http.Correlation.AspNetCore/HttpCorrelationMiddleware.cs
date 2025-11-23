@@ -63,12 +63,8 @@ internal sealed class HttpCorrelationMiddleware
         }
     }
 
-    private static string GeneratedId(HttpContext context)
-    {
-        var correlationIdGenerator = context.RequestServices.GetService<IHttpCorrelationIdProvider>();
-
-        return correlationIdGenerator is null ? context.TraceIdentifier : correlationIdGenerator.GenerateId();
-    }
+    private static string GeneratedId(HttpContext context) =>
+        context.RequestServices.GetService<IHttpCorrelationIdProvider>()?.GenerateId() ?? context.TraceIdentifier;
 
     private static bool GetIdFromHeader(HttpContext context, out StringValues correlationId, out string usedHeaderName)
     {

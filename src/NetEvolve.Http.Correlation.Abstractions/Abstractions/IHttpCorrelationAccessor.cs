@@ -15,5 +15,5 @@ public interface IHttpCorrelationAccessor
     /// <summary>
     /// Gets the header name, which is used.
     /// </summary>
-    string? HeaderName { get; internal set; }
+    string HeaderName { get; internal set; }
 }
