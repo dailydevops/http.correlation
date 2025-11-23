@@ -34,25 +34,28 @@ public class ServiceCollectionExtensionsTests
         var result = services.AddHttpCorrelation();
 
         // Assert
-        _ = await Assert.That(result).IsTypeOf<HttpCorrelationBuilder>();
-        _ = await Assert.That(services.Count).IsEqualTo(2);
-        _ = await Assert
-            .That(
-                services.Any(s =>
-                    s.ServiceType == typeof(IHttpCorrelationAccessor)
-                    && s.Lifetime == ServiceLifetime.Scoped
-                    && s.ImplementationType == typeof(HttpCorrelationAccessor)
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsTypeOf<HttpCorrelationBuilder>();
+            _ = await Assert.That(services.Count).IsEqualTo(2);
+            _ = await Assert
+                .That(
+                    services.Any(s =>
+                        s.ServiceType == typeof(IHttpCorrelationAccessor)
+                        && s.Lifetime == ServiceLifetime.Scoped
+                        && s.ImplementationType == typeof(HttpCorrelationAccessor)
+                    )
                 )
-            )
-            .IsTrue();
-        _ = await Assert
-            .That(
-                services.Any(s =>
-                    s.ServiceType == typeof(IHttpContextAccessor)
-                    && s.Lifetime == ServiceLifetime.Singleton
-                    && s.ImplementationType == typeof(HttpContextAccessor)
+                .IsTrue();
+            _ = await Assert
+                .That(
+                    services.Any(s =>
+                        s.ServiceType == typeof(IHttpContextAccessor)
+                        && s.Lifetime == ServiceLifetime.Singleton
+                        && s.ImplementationType == typeof(HttpContextAccessor)
+                    )
                 )
-            )
-            .IsTrue();
+                .IsTrue();
+        }
     }
 }

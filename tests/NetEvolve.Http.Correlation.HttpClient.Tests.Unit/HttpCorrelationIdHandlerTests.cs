@@ -25,8 +25,11 @@ public class HttpCorrelationIdHandlerTests
         using var response = client.Send(request);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
-        _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(correlationId);
+        }
     }
 
     [Test]
@@ -44,8 +47,11 @@ public class HttpCorrelationIdHandlerTests
         using var response = client.Send(request);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
-        _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(correlationId);
+        }
     }
 
     [Test]
@@ -65,9 +71,12 @@ public class HttpCorrelationIdHandlerTests
         using var response = client.Send(request);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
-        _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(existingCorrelationId);
-        _ = await Assert.That(request.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(existingCorrelationId);
+            _ = await Assert.That(request.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        }
     }
 
     [Test]
@@ -89,9 +98,12 @@ public class HttpCorrelationIdHandlerTests
         using var response = client.Send(request);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
-        _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(existingCorrelationId);
-        _ = await Assert.That(response.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(existingCorrelationId);
+            _ = await Assert.That(response.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        }
     }
 
     [Test]
@@ -107,8 +119,11 @@ public class HttpCorrelationIdHandlerTests
 
         using var response = await client.SendAsync(request);
 
-        _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(correlationId);
+        }
     }
 
     [Test]
@@ -124,8 +139,11 @@ public class HttpCorrelationIdHandlerTests
 
         using var response = await client.SendAsync(request);
 
-        _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(correlationId);
+        }
     }
 
     [Test]
@@ -143,9 +161,12 @@ public class HttpCorrelationIdHandlerTests
 
         using var response = await client.SendAsync(request);
 
-        _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(existingCorrelationId);
-        _ = await Assert.That(request.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(request.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(request.Headers.GetValues(headerName)).Contains(existingCorrelationId);
+            _ = await Assert.That(request.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        }
     }
 
     [Test]
@@ -165,9 +186,12 @@ public class HttpCorrelationIdHandlerTests
 
         using var response = await client.SendAsync(request);
 
-        _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
-        _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(existingCorrelationId);
-        _ = await Assert.That(response.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(response.Headers.Contains(headerName)).IsTrue();
+            _ = await Assert.That(response.Headers.GetValues(headerName)).Contains(existingCorrelationId);
+            _ = await Assert.That(response.Headers.GetValues(headerName)).DoesNotContain(correlationId);
+        }
     }
 
     private sealed class TestCorrelationAccessor : IHttpCorrelationAccessor
