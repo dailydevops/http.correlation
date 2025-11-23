@@ -14,14 +14,14 @@ public class HttpClientBuilderExtensionsTests
     {
         IHttpClientBuilder builder = null!;
 
-        _ = await Assert.That(() => builder.AddHttpCorrelation()).Throws<ArgumentNullException>();
+        _ = await Assert.That(() => builder.WithHttpCorrelation()).Throws<ArgumentNullException>();
     }
 
     [Test]
     public async Task AddHttpCorrelation_Builder_Expected()
     {
         var services = new ServiceCollection();
-        _ = services.AddHttpClient("test").AddHttpCorrelation();
+        _ = services.AddHttpClient("test").WithHttpCorrelation();
 
         _ = await Assert
             .That(

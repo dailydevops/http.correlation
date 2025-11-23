@@ -3,7 +3,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using NetEvolve.SequentialGuid;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
@@ -41,24 +40,6 @@ public class HttpCorrelationMiddlewareTests : TestBase
         _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
     }
 #endif
-
-    [Test]
-    [Arguments(SequentialGuidType.AsBinary)]
-    [Arguments(SequentialGuidType.AsString)]
-    [Arguments(SequentialGuidType.AtEnd)]
-    public async Task UseHttpCorrelation_WithSequentialGuidGenerator_Expected(SequentialGuidType sequentialGuidType)
-    {
-        var result = await RunAsync(
-#pragma warning disable CS0618 // Obsolete
-            correlationBuilder: builder =>
-            builder.WithSequentialGuidGenerator(options => options.SequentialType = sequentialGuidType)
-#pragma warning restore CS0618 // Obsolete
-        );
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
-        var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        _ = await Assert.That(values).IsNotEmpty();
-        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
-    }
 
     [Test]
     public async Task UseHttpCorrelation_WithHeaderName1_Expected()

@@ -14,7 +14,7 @@ public static class HttpClientBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder"/> instance.</param>
     /// <returns>The <see cref="IHttpClientBuilder"/> instance.</returns>
-    public static IHttpClientBuilder AddHttpCorrelation(this IHttpClientBuilder builder)
+    public static IHttpClientBuilder WithHttpCorrelation(this IHttpClientBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
 

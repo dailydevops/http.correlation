@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NetEvolve.Http.Correlation.Abstractions;
 
 public abstract class TestBase
@@ -22,40 +23,45 @@ public abstract class TestBase
         string requestPath = DefaultPath
     )
     {
-        var builder = new WebHostBuilder()
+        using var host = new HostBuilder()
             .ConfigureServices(services =>
             {
                 serviceBuilder?.Invoke(services);
                 var builder = services.AddRouting().AddHttpCorrelation();
                 correlationBuilder?.Invoke(builder);
             })
-            .Configure(app =>
+            .ConfigureWebHost(webBuilder =>
             {
-                _ = app.UseHttpCorrelation()
-                    .UseRouting()
-                    .UseEndpoints(endpoints =>
+                _ = webBuilder
+                    .UseTestServer()
+                    .Configure(app =>
                     {
-                        _ = endpoints.MapGet(
-                            DefaultPath,
-                            async context => await context.Response.WriteAsync("Hello World!")
-                        );
-                        _ = endpoints.MapGet(
-                            InvokePath,
-                            async (HttpContext context, IHttpCorrelationAccessor accessor) =>
-                                await context.Response.WriteAsync(accessor.CorrelationId)
-                        );
+                        _ = app.UseHttpCorrelation()
+                            .UseRouting()
+                            .UseEndpoints(endpoints =>
+                            {
+                                _ = endpoints.MapGet(
+                                    DefaultPath,
+                                    async context => await context.Response.WriteAsync("Hello World!")
+                                );
+                                _ = endpoints.MapGet(
+                                    InvokePath,
+                                    async (HttpContext context, IHttpCorrelationAccessor accessor) =>
+                                        await context.Response.WriteAsync(accessor.CorrelationId)
+                                );
+                            });
                     });
-            });
+            })
+            .Build();
+        await host.StartAsync().ConfigureAwait(false);
 
-        using (var server = new TestServer(builder))
-        {
-            var client = server.CreateClient();
+        using var server = host.GetTestServer();
+        using var client = server.CreateClient();
 
-            clientConfiguration?.Invoke(client);
+        clientConfiguration?.Invoke(client);
 
-            var response = await client.GetAsync(new Uri(requestPath, UriKind.Relative)).ConfigureAwait(false);
+        var response = await client.GetAsync(new Uri(requestPath, UriKind.Relative)).ConfigureAwait(false);
 
-            return response;
-        }
+        return response;
     }
 }

@@ -37,69 +37,57 @@ public class HttpCorrelationBuilderExtensionsTests
         // Assert
         _ = await Assert.That(result).IsNotNull();
         _ = await Assert
-            .That(
-                services.Any(s =>
-                    s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                    && s.Lifetime == ServiceLifetime.Singleton
-                    && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                    && s.ImplementationType.FullName.Equals(
-                        "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
-                        StringComparison.Ordinal
-                    )
+            .That(services)
+            .Contains(s =>
+                s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                && s.Lifetime == ServiceLifetime.Singleton
+                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                && s.ImplementationType.FullName.Equals(
+                    "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
+                    StringComparison.Ordinal
                 )
-            )
-            .IsTrue();
+            );
         _ = await Assert.That(services.Count).IsEqualTo(1);
     }
 
+#if NET9_0_OR_GREATER
     [Test]
-    public async Task WithSequentialGuidGenerator_BuilderNull_ThrowsArgumentNullException()
+    public async Task WithGuidV7Generator_BuilderNull_ThrowsArgumentNullException()
     {
         // Arrange
         IHttpCorrelationBuilder builder = null!;
 
         // Act / Assert
         _ = await Assert
-            .That(
-#pragma warning disable CS0618 // Obsolete
-                () => builder.WithSequentialGuidGenerator()
-#pragma warning restore CS0618 // Obsolete
-            )
+            .That(() => builder.WithGuidV7Generator())
             .Throws<ArgumentNullException>()
             .WithParameterName("builder");
     }
 
     [Test]
-    public async Task WithSequentialGuidGenerator_Builder_Expected()
+    public async Task WithGuidV7Generator_Builder_Expected()
     {
         // Arrange
         var services = new ServiceCollection();
         var builder = new HttpCorrelationBuilder(services);
 
         // Act
-#pragma warning disable CS0618 // Obsolete
-        var result = builder
-            .WithSequentialGuidGenerator()
-            .WithSequentialGuidGenerator(options =>
-                options.SequentialType = SequentialGuid.SequentialGuidType.AsBinary
-            );
-#pragma warning restore CS0618 // Obsolete
+        var result = builder.WithGuidV7Generator().WithGuidV7Generator();
 
         // Assert
         _ = await Assert.That(result).IsNotNull();
         _ = await Assert
-            .That(
-                services.Any(s =>
-                    s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                    && s.Lifetime == ServiceLifetime.Singleton
-                    && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                    && s.ImplementationType.FullName.Equals(
-                        "NetEvolve.Http.Correlation.Generators.SequentialGuidCorrelationIdProvider",
-                        StringComparison.Ordinal
-                    )
+            .That(services)
+            .Contains(s =>
+                s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                && s.Lifetime == ServiceLifetime.Singleton
+                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                && s.ImplementationType.FullName.Equals(
+                    "NetEvolve.Http.Correlation.Generators.GuidV7CorrelationIdProvider",
+                    StringComparison.Ordinal
                 )
-            )
-            .IsTrue();
-        _ = await Assert.That(services.Count).IsEqualTo(9);
+            );
+        _ = await Assert.That(services.Count).IsEqualTo(1);
     }
+#endif
 }
