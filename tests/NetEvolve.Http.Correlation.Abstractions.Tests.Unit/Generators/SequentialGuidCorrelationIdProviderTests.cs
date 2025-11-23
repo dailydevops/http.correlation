@@ -1,19 +1,21 @@
 ﻿namespace NetEvolve.Http.Correlation.Abstractions.Tests.Unit.Generators;
 
 using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using NetEvolve.Http.Correlation.Generators;
 using NetEvolve.SequentialGuid;
 using NSubstitute;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public sealed class SequentialGuidCorrelationIdProviderTests
 {
-    [Theory]
-    [InlineData(SequentialGuidType.AsBinary)]
-    [InlineData(SequentialGuidType.AsString)]
-    [InlineData(SequentialGuidType.AtEnd)]
-    public void GenerateId_NotEmpty(SequentialGuidType sequentialType)
+    [Test]
+    [Arguments(SequentialGuidType.AsBinary)]
+    [Arguments(SequentialGuidType.AsString)]
+    [Arguments(SequentialGuidType.AtEnd)]
+    public async Task GenerateId_NotEmpty(SequentialGuidType sequentialType)
     {
         // Arrange
         var optionsMonitorMock = Substitute.For<IOptionsMonitor<SequentialGuidOptions>>();
@@ -24,6 +26,6 @@ public sealed class SequentialGuidCorrelationIdProviderTests
         var id = provider.GenerateId();
 
         // Assert
-        Assert.NotEqual($"{Guid.Empty:N}", id);
+        _ = await Assert.That(id).IsNotEqualTo($"{Guid.Empty:N}");
     }
 }
