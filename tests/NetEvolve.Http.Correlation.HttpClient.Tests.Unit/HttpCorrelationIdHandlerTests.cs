@@ -1,12 +1,10 @@
 namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
 
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NetEvolve.Http.Correlation.Abstractions;
-using NSubstitute;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

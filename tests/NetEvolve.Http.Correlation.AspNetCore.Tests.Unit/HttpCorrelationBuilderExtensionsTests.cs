@@ -1,8 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation.Abstractions;
