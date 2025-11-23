@@ -1,12 +1,15 @@
 ﻿namespace NetEvolve.Http.Correlation.TestGenerator.Tests.Unit;
 
-using Xunit;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public class TestGeneratorCorrelationIdProviderTests
 {
-    [Theory]
-    [MemberData(nameof(GenerateIdData))]
-    public void GenerateId_Theory_Expected(string expected, string? value)
+    [Test]
+    [MethodDataSource(nameof(GenerateIdData))]
+    public async Task GenerateId_Theory_Expected(string expected, string? value)
     {
         // Arrange
         var correlationIdProvider = new TestGeneratorCorrelationIdProvider(value);
@@ -15,15 +18,14 @@ public class TestGeneratorCorrelationIdProviderTests
         var result = correlationIdProvider.GenerateId();
 
         // Assert
-        Assert.Equal(expected, result);
+        _ = await Assert.That(result).IsEqualTo(expected);
     }
 
-    public static TheoryData<string, string?> GenerateIdData =>
-        new TheoryData<string, string?>
-        {
-            { "Generated_Test_Id", null },
-            { "Generated_Test_Id", string.Empty },
-            { "Generated_Test_Id", " " },
-            { "HelloWorldID", "HelloWorldID" },
-        };
+    public static IEnumerable<(string expected, string? value)> GenerateIdData()
+    {
+        yield return ("Generated_Test_Id", null);
+        yield return ("Generated_Test_Id", string.Empty);
+        yield return ("Generated_Test_Id", " ");
+        yield return ("HelloWorldID", "HelloWorldID");
+    }
 }

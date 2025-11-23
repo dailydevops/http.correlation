@@ -1,24 +1,29 @@
 ﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
 
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public class ApplicationBuilderExtensionsTests
 {
-    [Fact]
-    public void UseHttpCorrelation_BuilderNull_ThrowsArgumentNullException()
+    [Test]
+    public async Task UseHttpCorrelation_BuilderNull_ThrowsArgumentNullException()
     {
         // Arrange
         IApplicationBuilder builder = null!;
 
         // Act / Assert
-        _ = Assert.Throws<ArgumentNullException>("app", () => builder.UseHttpCorrelation());
+        _ = await Assert
+            .That(() => builder.UseHttpCorrelation())
+            .Throws<ArgumentNullException>()
+            .WithParameterName("app");
     }
 
-    [Fact]
-    public void UseHttpCorrelation_ServicesNotRegistered_ThrowsInvalidOperationException()
+    [Test]
+    public async Task UseHttpCorrelation_ServicesNotRegistered_ThrowsInvalidOperationException()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -26,11 +31,11 @@ public class ApplicationBuilderExtensionsTests
         var builder = new ApplicationBuilder(provider);
 
         // Act / Assert
-        _ = Assert.Throws<InvalidOperationException>(() => builder.UseHttpCorrelation());
+        _ = await Assert.That(() => builder.UseHttpCorrelation()).Throws<InvalidOperationException>();
     }
 
-    [Fact]
-    public void UseHttpCorrelation_Builder_Expected()
+    [Test]
+    public async Task UseHttpCorrelation_Builder_Expected()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -42,6 +47,6 @@ public class ApplicationBuilderExtensionsTests
         var result = builder.UseHttpCorrelation();
 
         // Assert
-        Assert.NotNull(result);
+        _ = await Assert.That(result).IsNotNull();
     }
 }

@@ -4,47 +4,48 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NetEvolve.SequentialGuid;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public class HttpCorrelationMiddlewareTests : TestBase
 {
-    [Fact]
+    [Test]
     public async Task UseHttpCorrelation_WithoutGenerator_Expected()
     {
         var result = await RunAsync();
 
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
-        Assert.NotEmpty(result.Headers.GetValues(CorrelationConstants.HeaderName1));
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+        _ = await Assert.That(result.Headers.GetValues(CorrelationConstants.HeaderName1)).IsNotEmpty();
     }
 
-    [Fact]
+    [Test]
     public async Task UseHttpCorrelation_WithGenerator_Expected()
     {
         var result = await RunAsync(correlationBuilder: builder => builder.WithGuidGenerator());
 
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
 
         var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        Assert.NotEmpty(values);
-        Assert.True(Guid.TryParse(values.First(), out _));
+        _ = await Assert.That(values).IsNotEmpty();
+        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
     }
 
 #if NET9_0_OR_GREATER
-    [Fact]
+    [Test]
     public async Task UseHttpCorrelation_WithGuidV7Generator_Expected()
     {
         var result = await RunAsync(correlationBuilder: builder => builder.WithGuidV7Generator());
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
         var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        Assert.NotEmpty(values);
-        Assert.True(Guid.TryParse(values.First(), out _));
+        _ = await Assert.That(values).IsNotEmpty();
+        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
     }
 #endif
 
-    [Theory]
-    [InlineData(SequentialGuidType.AsBinary)]
-    [InlineData(SequentialGuidType.AsString)]
-    [InlineData(SequentialGuidType.AtEnd)]
+    [Test]
+    [Arguments(SequentialGuidType.AsBinary)]
+    [Arguments(SequentialGuidType.AsString)]
+    [Arguments(SequentialGuidType.AtEnd)]
     public async Task UseHttpCorrelation_WithSequentialGuidGenerator_Expected(SequentialGuidType sequentialGuidType)
     {
         var result = await RunAsync(
@@ -53,13 +54,13 @@ public class HttpCorrelationMiddlewareTests : TestBase
             builder.WithSequentialGuidGenerator(options => options.SequentialType = sequentialGuidType)
 #pragma warning restore CS0618 // Obsolete
         );
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
         var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        Assert.NotEmpty(values);
-        Assert.True(Guid.TryParse(values.First(), out _));
+        _ = await Assert.That(values).IsNotEmpty();
+        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
     }
 
-    [Fact]
+    [Test]
     public async Task UseHttpCorrelation_WithHeaderName1_Expected()
     {
         var testCorrelationId = Guid.NewGuid().ToString("N");
@@ -69,13 +70,15 @@ public class HttpCorrelationMiddlewareTests : TestBase
             requestPath: InvokePath
         );
 
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName1));
-        Assert.Equal(testCorrelationId, result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault());
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+        _ = await Assert
+            .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
+            .IsEqualTo(testCorrelationId);
 
-        Assert.Equal(testCorrelationId, await result.Content.ReadAsStringAsync());
+        _ = await Assert.That(await result.Content.ReadAsStringAsync()).IsEqualTo(testCorrelationId);
     }
 
-    [Fact]
+    [Test]
     public async Task UseHttpCorrelation_WithHeaderName2_Expected()
     {
         var testCorrelationId = Guid.NewGuid().ToString("N");
@@ -83,7 +86,9 @@ public class HttpCorrelationMiddlewareTests : TestBase
             client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId)
         );
 
-        Assert.True(result.Headers.Contains(CorrelationConstants.HeaderName2));
-        Assert.Equal(testCorrelationId, result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault());
+        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName2)).IsTrue();
+        _ = await Assert
+            .That(result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault())
+            .IsEqualTo(testCorrelationId);
     }
 }

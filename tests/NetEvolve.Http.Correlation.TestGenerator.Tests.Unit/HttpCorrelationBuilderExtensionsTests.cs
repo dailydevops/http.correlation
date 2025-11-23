@@ -1,24 +1,30 @@
 ﻿namespace NetEvolve.Http.Correlation.TestGenerator.Tests.Unit;
 
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation.Abstractions;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public class HttpCorrelationBuilderExtensionsTests
 {
-    [Fact]
-    public void WithTestGenerator_BuilderNull_Throws()
+    [Test]
+    public async Task WithTestGenerator_BuilderNull_Throws()
     {
         // Arrange
         IHttpCorrelationBuilder builder = null!;
 
         // Act / Assert
-        _ = Assert.Throws<ArgumentNullException>("builder", () => builder.WithTestGenerator());
+        _ = await Assert
+            .That(() => builder.WithTestGenerator())
+            .Throws<ArgumentNullException>()
+            .WithParameterName("builder");
     }
 
-    [Fact]
-    public void WithTestGenerator_Builder_ReturnsBuilder()
+    [Test]
+    public async Task WithTestGenerator_Builder_ReturnsBuilder()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -28,13 +34,15 @@ public class HttpCorrelationBuilderExtensionsTests
         _ = builder.WithTestGenerator();
 
         // Assert
-        Assert.Contains(
-            services,
-            s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && s.ImplementationInstance is TestGeneratorCorrelationIdProvider
-        );
+        _ = await Assert
+            .That(
+                services.Any(s =>
+                    s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                    && s.Lifetime == ServiceLifetime.Singleton
+                    && s.ImplementationInstance is TestGeneratorCorrelationIdProvider
+                )
+            )
+            .IsTrue();
     }
 
     private sealed class TestHttpCorrelationBuilder : IHttpCorrelationBuilder

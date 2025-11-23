@@ -2,20 +2,22 @@
 namespace NetEvolve.Http.Correlation.Abstractions.Tests.Unit.Generators;
 
 using System;
+using System.Threading.Tasks;
 using NetEvolve.Http.Correlation.Generators;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public sealed class GuidV7CorrelationIdProviderTests
 {
-    [Fact]
-    public void GenerateId_NotEmpty()
+    [Test]
+    public async Task GenerateId_NotEmpty()
     {
         // Arrange
         var provider = new GuidV7CorrelationIdProvider();
         // Act
         var id = provider.GenerateId();
         // Assert
-        Assert.NotEqual($"{Guid.Empty:N}", id);
+        _ = await Assert.That(id).IsNotEqualTo($"{Guid.Empty:N}");
     }
 }
 #endif
