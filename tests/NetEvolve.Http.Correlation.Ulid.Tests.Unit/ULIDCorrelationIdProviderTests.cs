@@ -2,12 +2,13 @@
 
 using System.Linq;
 using System.Threading.Tasks;
-using Xunit;
+using TUnit.Assertions.Extensions;
+using TUnit.Core;
 
 public class ULIDCorrelationIdProviderTests
 {
-    [Fact]
-    public void GenerateId_Fact_Expected()
+    [Test]
+    public async Task GenerateId_Fact_Expected()
     {
         // Arrange
         var correlationIdProvider = new UlidCorrelationIdProvider();
@@ -16,11 +17,11 @@ public class ULIDCorrelationIdProviderTests
         var result = correlationIdProvider.GenerateId();
 
         // Assert
-        Assert.NotNull(result);
+        _ = await Assert.That(result).IsNotNull();
     }
 
-    [Fact]
-    public void GenerateId_UniqueIds_Expected()
+    [Test]
+    public async Task GenerateId_UniqueIds_Expected()
     {
         // Arrange
         const int numberOfIds = 10_000;
@@ -31,6 +32,6 @@ public class ULIDCorrelationIdProviderTests
         _ = Parallel.For(0, numberOfIds, i => values[i] = correlationIdProvider.GenerateId());
 
         // Assert
-        Assert.Equal(numberOfIds, values.Distinct().Count());
+        _ = await Assert.That(values.Distinct().Count()).IsEqualTo(numberOfIds);
     }
 }

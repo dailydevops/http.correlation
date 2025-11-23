@@ -1,6 +1,9 @@
 <Project>
   <PropertyGroup>
     <_TargetFrameworks>net6.0;net7.0;net8.0;net9.0</_TargetFrameworks>
+    <!-- Remove these properties after .NET 10 migration -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Workaround, until https://github.com/GitTools/GitVersion/pull/4206 is released -->
