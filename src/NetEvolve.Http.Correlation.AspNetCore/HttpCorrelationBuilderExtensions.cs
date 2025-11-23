@@ -1,7 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation;
 
 using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.Http.Correlation.Abstractions;
 using NetEvolve.Http.Correlation.Generators;

@@ -1,8 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation.Abstractions;
@@ -35,19 +33,22 @@ public class HttpCorrelationBuilderExtensionsTests
         var result = builder.WithGuidGenerator().WithGuidGenerator();
 
         // Assert
-        _ = await Assert.That(result).IsNotNull();
-        _ = await Assert
-            .That(services)
-            .Contains(s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                && s.ImplementationType.FullName.Equals(
-                    "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
-                    StringComparison.Ordinal
-                )
-            );
-        _ = await Assert.That(services.Count).IsEqualTo(1);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsNotNull();
+            _ = await Assert
+                .That(services)
+                .Contains(s =>
+                    s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                    && s.Lifetime == ServiceLifetime.Singleton
+                    && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                    && s.ImplementationType.FullName.Equals(
+                        "NetEvolve.Http.Correlation.Generators.GuidCorrelationIdProvider",
+                        StringComparison.Ordinal
+                    )
+                );
+            _ = await Assert.That(services.Count).IsEqualTo(1);
+        }
     }
 
 #if NET9_0_OR_GREATER
@@ -75,19 +76,22 @@ public class HttpCorrelationBuilderExtensionsTests
         var result = builder.WithGuidV7Generator().WithGuidV7Generator();
 
         // Assert
-        _ = await Assert.That(result).IsNotNull();
-        _ = await Assert
-            .That(services)
-            .Contains(s =>
-                s.ServiceType == typeof(IHttpCorrelationIdProvider)
-                && s.Lifetime == ServiceLifetime.Singleton
-                && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
-                && s.ImplementationType.FullName.Equals(
-                    "NetEvolve.Http.Correlation.Generators.GuidV7CorrelationIdProvider",
-                    StringComparison.Ordinal
-                )
-            );
-        _ = await Assert.That(services.Count).IsEqualTo(1);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result).IsNotNull();
+            _ = await Assert
+                .That(services)
+                .Contains(s =>
+                    s.ServiceType == typeof(IHttpCorrelationIdProvider)
+                    && s.Lifetime == ServiceLifetime.Singleton
+                    && !string.IsNullOrEmpty(s.ImplementationType!.FullName)
+                    && s.ImplementationType.FullName.Equals(
+                        "NetEvolve.Http.Correlation.Generators.GuidV7CorrelationIdProvider",
+                        StringComparison.Ordinal
+                    )
+                );
+            _ = await Assert.That(services.Count).IsEqualTo(1);
+        }
     }
 #endif
 }

@@ -13,8 +13,11 @@ public class HttpCorrelationMiddlewareTests : TestBase
     {
         var result = await RunAsync();
 
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
-        _ = await Assert.That(result.Headers.GetValues(CorrelationConstants.HeaderName1)).IsNotEmpty();
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+            _ = await Assert.That(result.Headers.GetValues(CorrelationConstants.HeaderName1)).IsNotEmpty();
+        }
     }
 
     [Test]
@@ -22,11 +25,14 @@ public class HttpCorrelationMiddlewareTests : TestBase
     {
         var result = await RunAsync(correlationBuilder: builder => builder.WithGuidGenerator());
 
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
 
-        var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        _ = await Assert.That(values).IsNotEmpty();
-        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
+            var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
+            _ = await Assert.That(values).IsNotEmpty();
+            _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
+        }
     }
 
 #if NET9_0_OR_GREATER
@@ -34,10 +40,13 @@ public class HttpCorrelationMiddlewareTests : TestBase
     public async Task UseHttpCorrelation_WithGuidV7Generator_Expected()
     {
         var result = await RunAsync(correlationBuilder: builder => builder.WithGuidV7Generator());
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
-        var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
-        _ = await Assert.That(values).IsNotEmpty();
-        _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+            var values = result.Headers.GetValues(CorrelationConstants.HeaderName1);
+            _ = await Assert.That(values).IsNotEmpty();
+            _ = await Assert.That(Guid.TryParse(values.First(), out _)).IsTrue();
+        }
     }
 #endif
 
@@ -51,12 +60,15 @@ public class HttpCorrelationMiddlewareTests : TestBase
             requestPath: InvokePath
         );
 
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
-        _ = await Assert
-            .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
-            .IsEqualTo(testCorrelationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+            _ = await Assert
+                .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
+                .IsEqualTo(testCorrelationId);
 
-        _ = await Assert.That(await result.Content.ReadAsStringAsync()).IsEqualTo(testCorrelationId);
+            _ = await Assert.That(await result.Content.ReadAsStringAsync()).IsEqualTo(testCorrelationId);
+        }
     }
 
     [Test]
@@ -67,9 +79,12 @@ public class HttpCorrelationMiddlewareTests : TestBase
             client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId)
         );
 
-        _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName2)).IsTrue();
-        _ = await Assert
-            .That(result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault())
-            .IsEqualTo(testCorrelationId);
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName2)).IsTrue();
+            _ = await Assert
+                .That(result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault())
+                .IsEqualTo(testCorrelationId);
+        }
     }
 }
