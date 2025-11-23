@@ -16,8 +16,6 @@
     <File Path="update-solution.ps1" />
   </Folder>
   <Folder Name="/src/">
-    <File Path="src/Directory.Build.props" />
-    <File Path="src/Directory.Build.targets" />
     <Project Path="src/NetEvolve.Http.Correlation.Abstractions/NetEvolve.Http.Correlation.Abstractions.csproj" />
     <Project Path="src/NetEvolve.Http.Correlation.AspNetCore/NetEvolve.Http.Correlation.AspNetCore.csproj" />
     <Project Path="src/NetEvolve.Http.Correlation.HttpClient/NetEvolve.Http.Correlation.HttpClient.csproj" />
@@ -25,8 +23,6 @@
     <Project Path="src/NetEvolve.Http.Correlation.Ulid/NetEvolve.Http.Correlation.Ulid.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <File Path="tests/Directory.Build.props" />
-    <File Path="tests/Directory.Build.targets" />
     <Project Path="tests/NetEvolve.Http.Correlation.Abstractions.Tests.Unit/NetEvolve.Http.Correlation.Abstractions.Tests.Unit.csproj" />
     <Project Path="tests/NetEvolve.Http.Correlation.AspNetCore.Tests.Integration/NetEvolve.Http.Correlation.AspNetCore.Tests.Integration.csproj" />
     <Project Path="tests/NetEvolve.Http.Correlation.AspNetCore.Tests.Unit/NetEvolve.Http.Correlation.AspNetCore.Tests.Unit.csproj" />
