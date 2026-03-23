@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Description>Implementation of Azure.Functions middleware to use Http.Correlation. Based on the primary Http header `X-Correlation-ID` as well as the alternative Http header `X-Request-ID`.</Description>
+    <PackageTags>$(PackageTags);azure;functions</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetEvolve.Http.Correlation.Abstractions\NetEvolve.Http.Correlation.Abstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="NetEvolve.Http.Correlation.Azure.Functions.Tests.Unit" />
+    <InternalsVisibleTo Include="NetEvolve.Http.Correlation.Azure.Functions.Tests.Integration" />
+  </ItemGroup>
+</Project>

@@ -13,6 +13,5 @@
     <RepositoryUrl>https://github.com/dailydevops/http.correlation.git</RepositoryUrl>
     <PackageReleaseNotes>$(PackageProjectUrl)/releases</PackageReleaseNotes>
     <PackageTags>http;tracking;correlation;request id;</PackageTags>
-    <RootNamespace>NetEvolve.Http.Correlation</RootNamespace>
   </PropertyGroup>
 </Project>

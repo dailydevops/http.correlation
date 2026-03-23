@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore;
+﻿namespace NetEvolve.Http.Correlation.Azure.Functions;
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using NetEvolve.Http.Correlation.Abstractions;
 
 /// <summary>
-/// <see cref="IServiceCollection"/> Extensions for <see cref="HttpCorrelationMiddleware"/>.
+/// <see cref="IServiceCollection"/> Extensions for <see cref="FunctionsCorrelationMiddleware"/>.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -19,7 +19,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
-        services.AddHttpContextAccessor().TryAddScoped<IHttpCorrelationAccessor, HttpCorrelationAccessor>();
+        services
+            .AddScoped<IHttpCorrelationAccessor>(sp => sp.GetRequiredService<FunctionsCorrelationAccessor>())
+            .TryAddScoped<FunctionsCorrelationAccessor>();
 
         return new HttpCorrelationBuilder(services);
     }

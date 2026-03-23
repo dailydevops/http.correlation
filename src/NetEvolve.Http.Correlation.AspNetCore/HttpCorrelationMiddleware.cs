@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation;
+﻿namespace NetEvolve.Http.Correlation.AspNetCore;
 
 using System;
 using System.Collections.Generic;

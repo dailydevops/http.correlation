@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NetEvolve.Http.Correlation.Abstractions;
+using NetEvolve.Http.Correlation.AspNetCore;
 
 public abstract class TestBase
 {
