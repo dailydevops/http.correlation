@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation.Abstractions;
+using NetEvolve.Http.Correlation.TestGenerator;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

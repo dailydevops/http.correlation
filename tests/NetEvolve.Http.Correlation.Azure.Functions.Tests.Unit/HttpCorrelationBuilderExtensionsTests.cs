@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
+﻿namespace NetEvolve.Http.Correlation.Azure.Functions.Tests.Unit;
 
 using System;
 using System.Threading.Tasks;

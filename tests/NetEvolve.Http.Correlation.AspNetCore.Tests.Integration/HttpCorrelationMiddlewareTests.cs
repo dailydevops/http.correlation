@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using NetEvolve.Http.Correlation;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 

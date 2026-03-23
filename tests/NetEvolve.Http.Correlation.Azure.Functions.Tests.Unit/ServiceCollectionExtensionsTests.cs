@@ -1,19 +1,18 @@
-﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Unit;
+﻿namespace NetEvolve.Http.Correlation.Azure.Functions.Tests.Unit;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using NetEvolve.Http.Correlation;
 using NetEvolve.Http.Correlation.Abstractions;
-using NetEvolve.Http.Correlation.AspNetCore;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
 public class ServiceCollectionExtensionsTests
 {
     [Test]
-    public async Task AddHttpCorrelation_BuilderNull_ThrowsArgumentNullException()
+    public async Task AddHttpCorrelation_ServicesNull_ThrowsArgumentNullException()
     {
         // Arrange
         IServiceCollection services = null!;
@@ -26,7 +25,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Test]
-    public async Task AddHttpCorrelation_Builder_Expected()
+    public async Task AddHttpCorrelation_Services_Expected()
     {
         // Arrange
         var services = new ServiceCollection();
@@ -44,16 +43,16 @@ public class ServiceCollectionExtensionsTests
                     services.Any(s =>
                         s.ServiceType == typeof(IHttpCorrelationAccessor)
                         && s.Lifetime == ServiceLifetime.Scoped
-                        && s.ImplementationType == typeof(HttpCorrelationAccessor)
+                        && s.ImplementationFactory is not null
                     )
                 )
                 .IsTrue();
             _ = await Assert
                 .That(
                     services.Any(s =>
-                        s.ServiceType == typeof(IHttpContextAccessor)
-                        && s.Lifetime == ServiceLifetime.Singleton
-                        && s.ImplementationType == typeof(HttpContextAccessor)
+                        s.ServiceType == typeof(FunctionsCorrelationAccessor)
+                        && s.Lifetime == ServiceLifetime.Scoped
+                        && s.ImplementationType == typeof(FunctionsCorrelationAccessor)
                     )
                 )
                 .IsTrue();

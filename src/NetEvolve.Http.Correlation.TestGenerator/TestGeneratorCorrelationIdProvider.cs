@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation;
+﻿namespace NetEvolve.Http.Correlation.TestGenerator;
 
 using NetEvolve.Http.Correlation.Abstractions;
 

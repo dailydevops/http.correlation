@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation;
+﻿namespace NetEvolve.Http.Correlation.HttpClient;
 
 using System.Net.Http;
 using System.Threading;

@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation;
+﻿namespace NetEvolve.Http.Correlation.Ulid;
 
 using System;
 using NetEvolve.Http.Correlation.Abstractions;

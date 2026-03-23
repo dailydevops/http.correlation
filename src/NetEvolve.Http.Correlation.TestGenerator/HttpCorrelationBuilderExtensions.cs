@@ -1,4 +1,4 @@
-﻿namespace NetEvolve.Http.Correlation;
+﻿namespace NetEvolve.Http.Correlation.TestGenerator;
 
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
