@@ -15,7 +15,7 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
     /// <inheritdoc />
     public string CorrelationId
     {
-        get => _correlationId ??= _httpContextAccessor.HttpContext!.TraceIdentifier;
+        get => _correlationId ??= _httpContextAccessor.HttpContext?.TraceIdentifier!;
         set => _correlationId = value;
     }
 
