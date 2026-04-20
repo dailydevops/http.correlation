@@ -7,5 +7,6 @@ using NetEvolve.Http.Correlation.Abstractions;
 internal sealed class UlidCorrelationIdProvider : IHttpCorrelationIdProvider
 {
     /// <inheritdoc />
-    public string GenerateId() => Ulid.NewUlid().ToString();
+    public string GenerateId() =>
+        Ulid.NewUlid().ToString(format: null, System.Globalization.CultureInfo.InvariantCulture);
 }

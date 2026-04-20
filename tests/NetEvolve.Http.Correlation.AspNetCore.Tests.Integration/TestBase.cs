@@ -43,12 +43,17 @@ public abstract class TestBase
                             {
                                 _ = endpoints.MapGet(
                                     DefaultPath,
-                                    async context => await context.Response.WriteAsync("Hello World!")
+                                    async context =>
+                                        await context
+                                            .Response.WriteAsync("Hello World!", context.RequestAborted)
+                                            .ConfigureAwait(false)
                                 );
                                 _ = endpoints.MapGet(
                                     InvokePath,
                                     async (HttpContext context, IHttpCorrelationAccessor accessor) =>
-                                        await context.Response.WriteAsync(accessor.CorrelationId)
+                                        await context
+                                            .Response.WriteAsync(accessor.CorrelationId, context.RequestAborted)
+                                            .ConfigureAwait(false)
                                 );
                             });
                     });

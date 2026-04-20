@@ -12,7 +12,7 @@ public class HttpCorrelationMiddlewareTests : TestBase
     [Test]
     public async Task UseHttpCorrelation_WithoutGenerator_Expected()
     {
-        var result = await RunAsync();
+        var result = await RunAsync().ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -24,7 +24,7 @@ public class HttpCorrelationMiddlewareTests : TestBase
     [Test]
     public async Task UseHttpCorrelation_WithGenerator_Expected()
     {
-        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidGenerator());
+        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidGenerator()).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -40,7 +40,7 @@ public class HttpCorrelationMiddlewareTests : TestBase
     [Test]
     public async Task UseHttpCorrelation_WithGuidV7Generator_Expected()
     {
-        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidV7Generator());
+        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidV7Generator()).ConfigureAwait(false);
         using (Assert.Multiple())
         {
             _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
@@ -56,10 +56,11 @@ public class HttpCorrelationMiddlewareTests : TestBase
     {
         var testCorrelationId = Guid.NewGuid().ToString("N");
         var result = await RunAsync(
-            clientConfiguration: client =>
-                client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName1, testCorrelationId),
-            requestPath: InvokePath
-        );
+                clientConfiguration: client =>
+                    client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName1, testCorrelationId),
+                requestPath: InvokePath
+            )
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -68,7 +69,8 @@ public class HttpCorrelationMiddlewareTests : TestBase
                 .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
                 .IsEqualTo(testCorrelationId);
 
-            _ = await Assert.That(await result.Content.ReadAsStringAsync()).IsEqualTo(testCorrelationId);
+            var correlationResult = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            _ = await Assert.That(correlationResult).IsEqualTo(testCorrelationId);
         }
     }
 
@@ -77,8 +79,9 @@ public class HttpCorrelationMiddlewareTests : TestBase
     {
         var testCorrelationId = Guid.NewGuid().ToString("N");
         var result = await RunAsync(clientConfiguration: client =>
-            client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId)
-        );
+                client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId)
+            )
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
