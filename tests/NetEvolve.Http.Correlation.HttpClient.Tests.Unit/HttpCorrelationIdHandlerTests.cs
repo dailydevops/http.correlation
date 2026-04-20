@@ -117,7 +117,7 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request);
+        using var response = await client.SendAsync(request).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -137,7 +137,7 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request);
+        using var response = await client.SendAsync(request).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -159,7 +159,7 @@ public class HttpCorrelationIdHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
         request.Headers.Add(headerName, existingCorrelationId);
 
-        using var response = await client.SendAsync(request);
+        using var response = await client.SendAsync(request).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -184,7 +184,7 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request);
+        using var response = await client.SendAsync(request).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {

@@ -32,6 +32,6 @@ public class ULIDCorrelationIdProviderTests
         _ = Parallel.For(0, numberOfIds, i => values[i] = correlationIdProvider.GenerateId());
 
         // Assert
-        _ = await Assert.That(values.Distinct().Count()).IsEqualTo(numberOfIds);
+        _ = await Assert.That(values.Distinct(StringComparer.Ordinal).Count()).IsEqualTo(numberOfIds);
     }
 }
