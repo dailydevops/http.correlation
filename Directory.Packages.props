@@ -19,7 +19,7 @@
     <GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.24.0.138807" />
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Core" Version="2.51.0" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Core" Version="2.52.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.6.2" />
