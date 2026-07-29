@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using NetEvolve.Http.Correlation;
-using NSubstitute;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
+using TUnit.Mocks;
 
 public class FunctionsWorkerApplicationBuilderExtensionsTests
 {
@@ -29,7 +29,7 @@ public class FunctionsWorkerApplicationBuilderExtensionsTests
     {
         // Arrange
         var services = new ServiceCollection();
-        var builder = Substitute.For<IFunctionsWorkerApplicationBuilder>();
+        var builder = IFunctionsWorkerApplicationBuilder.Mock();
         _ = builder.Services.Returns(services);
 
         // Act / Assert
@@ -42,7 +42,7 @@ public class FunctionsWorkerApplicationBuilderExtensionsTests
         // Arrange
         var services = new ServiceCollection();
         _ = services.AddHttpCorrelation().WithGuidGenerator();
-        var builder = Substitute.For<IFunctionsWorkerApplicationBuilder>();
+        var builder = IFunctionsWorkerApplicationBuilder.Mock();
         _ = builder.Services.Returns(services);
 
         // Act
