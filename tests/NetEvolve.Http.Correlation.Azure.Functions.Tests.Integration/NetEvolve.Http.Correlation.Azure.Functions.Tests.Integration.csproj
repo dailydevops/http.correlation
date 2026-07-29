@@ -5,8 +5,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="NetEvolve.Extensions.TUnit" />
+    <!-- NSubstitute is kept for one narrow usage in TestBase.cs: mocking IInvocationFeatures so that its
+         generic Get<T>() call for the internal Microsoft.Azure.Functions.Worker type IFunctionBindingsFeature
+         recurses into an automatic substitute at runtime, which TUnit.Mocks' compile-time source generator
+         cannot do for a type this assembly has no visibility into. See the comment in TestBase.cs. -->
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Mocks" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.Azure.Functions\NetEvolve.Http.Correlation.Azure.Functions.csproj" />

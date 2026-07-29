@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetEvolve.Http.Correlation.Abstractions;
 using NSubstitute;
+using TUnit.Mocks;
 
 /// <summary>
 /// Test infrastructure for <see cref="FunctionsCorrelationMiddleware"/> integration tests.
@@ -32,7 +33,7 @@ public abstract class TestBase
         var serviceProvider = services.BuildServiceProvider();
         await using (serviceProvider.ConfigureAwait(false))
         {
-            var context = Substitute.For<FunctionContext>();
+            var context = FunctionContext.Mock();
             _ = context.InvocationId.Returns("test-invocation-id");
 
             var scope = serviceProvider.CreateAsyncScope();
@@ -40,22 +41,17 @@ public abstract class TestBase
             {
                 _ = context.InstanceServices.Returns(scope.ServiceProvider);
 
+                // Always required: FunctionContextHttpRequestExtensions.GetHttpRequestDataAsync() dereferences
+                // context.Features directly (no null-check), so an unconfigured (null) Features property throws
+                // even when there is no HTTP request to set up.
+                var features = Substitute.For<IInvocationFeatures>();
+                _ = context.Features.Returns(features);
+
                 if (requestSetup is not null)
                 {
                     var requestData = new TestHttpRequestData(context);
                     requestSetup(requestData);
-
-                    var httpRequestDataFeature = Substitute.For<IHttpRequestDataFeature>();
-
-#pragma warning disable CA2012 // NSubstitute fluent setup: ValueTask is intercepted by the substitute proxy, not actually consumed here
-                    _ = httpRequestDataFeature
-                        .GetHttpRequestDataAsync(context)
-                        .Returns(new ValueTask<HttpRequestData?>(requestData));
-#pragma warning restore CA2012
-
-                    var features = Substitute.For<IInvocationFeatures>();
-                    _ = features.Get<IHttpRequestDataFeature>().Returns(httpRequestDataFeature);
-                    _ = context.Features.Returns(features);
+                    SetupHttpRequestFeature(context, features, requestData);
                 }
 
                 var middleware = new FunctionsCorrelationMiddleware(
@@ -77,5 +73,28 @@ public abstract class TestBase
                 }
             }
         }
+    }
+
+    // TUnit.Mocks generates a fixed set of Get<T>() overloads at compile time, so an unconfigured call for any
+    // other T - such as the internal Microsoft.Azure.Functions.Worker type IFunctionBindingsFeature, which the
+    // middleware requests indirectly via context.GetInvocationResult() - falls through to a plain null and
+    // throws. NSubstitute is kept for just the feature collection: its proxy runs in an assembly the Functions
+    // Worker grants InternalsVisibleTo, so it can transparently substitute internal types at runtime without
+    // this assembly ever naming them (see dailydevops/healthchecks#2051 for the same fallback pattern).
+    private static void SetupHttpRequestFeature(
+        Mock<FunctionContext> context,
+        IInvocationFeatures features,
+        TestHttpRequestData requestData
+    )
+    {
+        var httpRequestDataFeature = IHttpRequestDataFeature.Mock();
+
+#pragma warning disable CA2012 // TUnit.Mocks fluent setup: ValueTask is intercepted by the mock proxy, not awaited here
+        // context.Object: a single implicit conversion to Arg<FunctionContext> is allowed, but chaining
+        // Mock<FunctionContext> -> FunctionContext -> Arg<FunctionContext> is two, which C# won't apply implicitly.
+        _ = httpRequestDataFeature.GetHttpRequestDataAsync(context.Object).Returns(requestData);
+#pragma warning restore CA2012
+
+        _ = features.Get<IHttpRequestDataFeature>().Returns(httpRequestDataFeature);
     }
 }

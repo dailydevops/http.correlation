@@ -5,8 +5,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
     <PackageReference Include="NetEvolve.Extensions.TUnit" />
-    <PackageReference Include="NSubstitute" />
     <PackageReference Include="TUnit" />
+    <PackageReference Include="TUnit.Mocks" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.Azure.Functions\NetEvolve.Http.Correlation.Azure.Functions.csproj" />
