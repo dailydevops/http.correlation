@@ -30,6 +30,7 @@ Configure services to use ULID-based correlation IDs in your `Program.cs`:
 
 ```csharp
 using NetEvolve.Http.Correlation;
+using NetEvolve.Http.Correlation.Ulid.ByteAether;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,7 @@ Structure:
 - **Strict Temporal & Monotonic Ordering**: Unlike standard ULID implementations that produce randomly ordered IDs within the same millisecond, this package leverages `ByteAether.Ulid` to guarantee strictly ordered monotonic ULIDs even during high-throughput sub-millisecond bursts.
 - **Shorter Representation**: 26 characters vs 36 for standard GUIDs.
 - **Better Database Performance**: Monotonic time-first ordering minimizes B-Tree index page fragmentation during high-volume database writes.
-- **No Coordination Required**: Lock-free distributed generation without inter-node coordination or collisions.
+- **No Central Coordinator Required**: Thread-safe monotonic generation within a process; cross-node ordering is not guaranteed and collisions remain probabilistic.
 
 ## Related Packages
 

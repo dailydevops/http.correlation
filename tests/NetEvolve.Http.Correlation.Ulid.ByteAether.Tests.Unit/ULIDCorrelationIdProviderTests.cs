@@ -49,7 +49,7 @@ public class ULIDCorrelationIdProviderTests
         // Assert
         foreach (var id in values.Zip(values.Skip(1), (a, b) => (a, b)))
         {
-            _ = await Assert.That(id.a).IsLessThan(id.b);
+            _ = await Assert.That(string.CompareOrdinal(id.a, id.b)).IsLessThan(0);
         }
     }
 }
