@@ -1,6 +1,6 @@
-# NetEvolve.Http.Correlation.Ulid
+# NetEvolve.Http.Correlation.Ulid.ByteAether
 
-[![Nuget](https://img.shields.io/nuget/v/NetEvolve.Http.Correlation.Ulid)](https://www.nuget.org/packages/NetEvolve.Http.Correlation.Ulid)
+[![Nuget](https://img.shields.io/nuget/v/NetEvolve.Http.Correlation.Ulid.ByteAether)](https://www.nuget.org/packages/NetEvolve.Http.Correlation.Ulid.ByteAether)
 
 ULID-based implementation of `IHttpCorrelationIdProvider` for sortable, time-based correlation IDs.
 
@@ -10,16 +10,16 @@ This package provides a ULID (Universally Unique Lexicographically Sortable Iden
 
 ## Key Features
 
-- **Time-Based Sorting**: ULIDs are lexicographically sortable by creation time
-- **High Entropy**: 128-bit identifiers with 80 bits of randomness
-- **URL-Safe**: Base32-encoded string representation
-- **Efficient**: Faster generation and comparison than GUIDs
-- **Multi-Framework Support**: Compatible with .NET 8.0, 9.0, and 10.0
+- **Monotonic Time-Based Sorting**: ULIDs are strictly ordered lexicographically, guaranteeing sequential ordering even for multiple IDs generated within the exact same millisecond.
+- **High Entropy**: 128-bit identifiers with 80 bits of randomness.
+- **URL-Safe**: Base32-encoded string representation.
+- **Efficient & Lock-Free**: Uses ByteAether's lock-free CAS operations for high-throughput, thread-safe monotonic generation.
+- **Multi-Framework Support**: Compatible with .NET 8.0, 9.0, and 10.0.
 
 ## Installation
 
 ```bash
-dotnet add package NetEvolve.Http.Correlation.Ulid
+dotnet add package NetEvolve.Http.Correlation.Ulid.ByteAether
 ```
 
 ## Usage
@@ -33,10 +33,10 @@ using NetEvolve.Http.Correlation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register correlation services with ULID provider
+// Register correlation services with ByteAether ULID provider
 builder.Services
     .AddHttpCorrelation()
-    .WithUlidGenerator(); // Use ULID provider, instead of default behavior.
+    .WithUlidGenerator(); // Use the ByteAether ULID provider instead of default behavior.
 
 var app = builder.Build();
 app.UseHttpCorrelation();
@@ -50,7 +50,7 @@ Combine with HTTP client correlation forwarding:
 ```csharp
 builder.Services
     .AddHttpCorrelation()
-    .WithUlidGenerator(); // Use ULID provider, instead of default behavior.
+    .WithUlidGenerator(); // Use the ByteAether ULID provider instead of default behavior.
 
 builder.Services
     .AddHttpClient("MyApiClient")
@@ -71,10 +71,10 @@ Structure:
 
 ## Benefits
 
-- **Temporal Ordering**: Natural sorting by creation time
-- **Shorter Representation**: 26 characters vs 36 for standard GUIDs
-- **Better Database Performance**: More efficient indexing
-- **No Coordination Required**: Distributed generation without collisions
+- **Strict Temporal & Monotonic Ordering**: Unlike standard ULID implementations that produce randomly ordered IDs within the same millisecond, this package leverages `ByteAether.Ulid` to guarantee strictly ordered monotonic ULIDs even during high-throughput sub-millisecond bursts.
+- **Shorter Representation**: 26 characters vs 36 for standard GUIDs.
+- **Better Database Performance**: Monotonic time-first ordering minimizes B-Tree index page fragmentation during high-volume database writes.
+- **No Coordination Required**: Lock-free distributed generation without inter-node coordination or collisions.
 
 ## Related Packages
 
@@ -91,7 +91,7 @@ Structure:
 ## Dependencies
 
 - `NetEvolve.Http.Correlation.Abstractions`
-- `Ulid` (NuGet package)
+- `ByteAether.Ulid` (NuGet package)
 
 ## License
 

@@ -11,7 +11,7 @@ This library provides a complete solution for implementing correlation IDs in yo
 - **Standard HTTP Headers**: Support for `X-Correlation-ID` (primary) and `X-Request-ID` (fallback)
 - **ASP.NET Core Integration**: Middleware for automatic correlation ID handling
 - **HTTP Client Integration**: Automatic correlation ID forwarding in outgoing requests
-- **Flexible ID Generation**: Pluggable providers (GUID, GUID V7, ULID, or custom)
+- **Flexible ID Generation**: Pluggable providers (GUID, GUID v7, standard ULID, strictly monotonic ByteAether ULID, or custom)
 - **Test-Friendly**: Dedicated test provider for predictable correlation IDs
 - **Modern .NET**: Full support for .NET 8.0, 9.0, and 10.0
 - **Source Generators**: Compile-time generation for optimal performance
@@ -50,6 +50,13 @@ ULID-based correlation ID provider. Provides sortable, globally unique identifie
 
 **[View Package Documentation →](https://github.com/dailydevops/http.correlation/blob/main/src/NetEvolve.Http.Correlation.Ulid/README.md)**
 
+#### NetEvolve.Http.Correlation.Ulid.ByteAether
+[![Nuget](https://img.shields.io/nuget/v/NetEvolve.Http.Correlation.Ulid.ByteAether)](https://www.nuget.org/packages/NetEvolve.Http.Correlation.Ulid.ByteAether)
+
+Monotonic ULID correlation ID provider powered by `ByteAether.Ulid`. Guarantees strict lexicographical ordering even for multiple correlation IDs generated within the exact same millisecond.
+
+**[View Package Documentation →](https://github.com/dailydevops/http.correlation/blob/main/src/NetEvolve.Http.Correlation.Ulid.ByteAether/README.md)**
+
 #### NetEvolve.Http.Correlation.TestGenerator
 [![Nuget](https://img.shields.io/nuget/v/NetEvolve.Http.Correlation.TestGenerator)](https://www.nuget.org/packages/NetEvolve.Http.Correlation.TestGenerator)
 
@@ -68,8 +75,11 @@ dotnet add package NetEvolve.Http.Correlation.AspNetCore
 # HTTP Client package (for outgoing requests)
 dotnet add package NetEvolve.Http.Correlation.HttpClient
 
-# Optional: ULID provider
+# Optional: Standard ULID provider
 dotnet add package NetEvolve.Http.Correlation.Ulid
+
+# Optional: Monotonic ULID provider (ByteAether)
+dotnet add package NetEvolve.Http.Correlation.Ulid.ByteAether
 ```
 
 ### 2. Configure Services
@@ -133,7 +143,18 @@ public class OrderService
 
 ### Using ULID Provider
 
+Both standard and ByteAether ULID providers use the same extension method (`.WithUlidGenerator()`). The active generator depends on which NuGet package and namespace you import:
+
 ```csharp
+// Standard ULID Generator (random ordering within the same millisecond)
+// Requires: dotnet add package NetEvolve.Http.Correlation.Ulid
+using NetEvolve.Http.Correlation.Ulid;
+
+// OR: Monotonic ByteAether ULID Generator (strictly ordered within the same millisecond)
+// Requires: dotnet add package NetEvolve.Http.Correlation.Ulid.ByteAether
+using NetEvolve.Http.Correlation.Ulid.ByteAether;
+
+// Registration remains identical for both providers:
 builder.Services
     .AddHttpCorrelation()
     .WithUlidGenerator();

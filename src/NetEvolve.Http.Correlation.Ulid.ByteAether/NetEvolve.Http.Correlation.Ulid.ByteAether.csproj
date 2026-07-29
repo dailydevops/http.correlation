@@ -3,7 +3,7 @@
     <TargetFrameworks>$(_TargetFrameworks)</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
-    <Description>Implementation of an IHttpCorrelationIdProvider based on NuGet package `Ulid`.</Description>
+    <Description>Implementation of an IHttpCorrelationIdProvider based on NuGet package `ByteAether.Ulid`.</Description>
     <PackageTags>$(PackageTags);ulid</PackageTags>
   </PropertyGroup>
   <ItemGroup>
