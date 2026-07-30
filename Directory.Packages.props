@@ -24,11 +24,8 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.9.0" />
     <PackageVersion Include="NetEvolve.Extensions.TUnit" Version="3.5.348" />
-    <!-- Kept for one narrow fallback usage in NetEvolve.Http.Correlation.Azure.Functions.Tests.Integration;
-         see the comment in that project's TestBase.cs and .csproj. -->
-    <PackageVersion Include="NSubstitute" Version="6.0.0" />
-    <PackageVersion Include="TUnit" Version="1.62.0" />
-    <PackageVersion Include="TUnit.Mocks" Version="1.62.0" />
+    <PackageVersion Include="TUnit" Version="1.63.0" />
+    <PackageVersion Include="TUnit.Mocks" Version="1.63.0" />
     <PackageVersion Include="Ulid" Version="1.4.1" />
     <PackageVersion Include="ByteAether.Ulid" Version="1.4.0" />
   </ItemGroup>
