@@ -7,7 +7,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetEvolve.Http.Correlation.Abstractions;
-using NSubstitute;
 using TUnit.Mocks;
 
 /// <summary>
@@ -44,7 +43,7 @@ public abstract class TestBase
                 // Always required: FunctionContextHttpRequestExtensions.GetHttpRequestDataAsync() dereferences
                 // context.Features directly (no null-check), so an unconfigured (null) Features property throws
                 // even when there is no HTTP request to set up.
-                var features = Substitute.For<IInvocationFeatures>();
+                var features = new TestInvocationFeatures();
                 _ = context.Features.Returns(features);
 
                 if (requestSetup is not null)
@@ -75,15 +74,12 @@ public abstract class TestBase
         }
     }
 
-    // TUnit.Mocks generates a fixed set of Get<T>() overloads at compile time, so an unconfigured call for any
-    // other T - such as the internal Microsoft.Azure.Functions.Worker type IFunctionBindingsFeature, which the
-    // middleware requests indirectly via context.GetInvocationResult() - falls through to a plain null and
-    // throws. NSubstitute is kept for just the feature collection: its proxy runs in an assembly the Functions
-    // Worker grants InternalsVisibleTo, so it can transparently substitute internal types at runtime without
-    // this assembly ever naming them (see dailydevops/healthchecks#2051 for the same fallback pattern).
+    // See TestInvocationFeatures.cs: the middleware requests the internal Microsoft.Azure.Functions.Worker type
+    // IFunctionBindingsFeature indirectly via context.GetInvocationResult(). This assembly cannot name that type,
+    // so TestInvocationFeatures.Get<T>() falls back to a DispatchProxy stub for any unregistered interface T.
     private static void SetupHttpRequestFeature(
         Mock<FunctionContext> context,
-        IInvocationFeatures features,
+        TestInvocationFeatures features,
         TestHttpRequestData requestData
     )
     {
@@ -95,6 +91,9 @@ public abstract class TestBase
         _ = httpRequestDataFeature.GetHttpRequestDataAsync(context.Object).Returns(requestData);
 #pragma warning restore CA2012
 
-        _ = features.Get<IHttpRequestDataFeature>().Returns(httpRequestDataFeature);
+        // The explicit <IHttpRequestDataFeature> type argument is load-bearing: it keys the dictionary on the
+        // interface type. If inferred from httpRequestDataFeature's concrete mock type instead, Get<IHttpRequestDataFeature>()
+        // below would miss and silently fall back to a DispatchProxy stub (see risk in TestInvocationFeatures.cs).
+        features.Set<IHttpRequestDataFeature>(httpRequestDataFeature);
     }
 }
