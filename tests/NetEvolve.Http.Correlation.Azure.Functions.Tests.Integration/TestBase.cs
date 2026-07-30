@@ -7,7 +7,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NetEvolve.Http.Correlation.Abstractions;
-using NSubstitute;
 using TUnit.Mocks;
 
 /// <summary>
@@ -44,7 +43,12 @@ public abstract class TestBase
                 // Always required: FunctionContextHttpRequestExtensions.GetHttpRequestDataAsync() dereferences
                 // context.Features directly (no null-check), so an unconfigured (null) Features property throws
                 // even when there is no HTTP request to set up.
-                var features = Substitute.For<IInvocationFeatures>();
+                //
+                // Requires TUnit.Mocks >= 1.63.0: the middleware always calls context.GetInvocationResult(), which
+                // internally requests the *internal* Worker type IFunctionBindingsFeature via Get<T>(). Only from
+                // 1.63.0 on does the generated mock auto-stub a T this assembly cannot name; on 1.62.0 the call
+                // returns null and GetRequired<T>() throws "No feature is registered with the type ...".
+                var features = IInvocationFeatures.Mock();
                 _ = context.Features.Returns(features);
 
                 if (requestSetup is not null)
@@ -75,15 +79,11 @@ public abstract class TestBase
         }
     }
 
-    // TUnit.Mocks generates a fixed set of Get<T>() overloads at compile time, so an unconfigured call for any
-    // other T - such as the internal Microsoft.Azure.Functions.Worker type IFunctionBindingsFeature, which the
-    // middleware requests indirectly via context.GetInvocationResult() - falls through to a plain null and
-    // throws. NSubstitute is kept for just the feature collection: its proxy runs in an assembly the Functions
-    // Worker grants InternalsVisibleTo, so it can transparently substitute internal types at runtime without
-    // this assembly ever naming them (see dailydevops/healthchecks#2051 for the same fallback pattern).
+    // The feature collection must stay typed as Mock<IInvocationFeatures>, not IInvocationFeatures: on the
+    // interface type, Get<T>() is the real method returning T, so there is nothing to chain .Returns() onto.
     private static void SetupHttpRequestFeature(
         Mock<FunctionContext> context,
-        IInvocationFeatures features,
+        Mock<IInvocationFeatures> features,
         TestHttpRequestData requestData
     )
     {
