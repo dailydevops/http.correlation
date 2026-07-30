@@ -19,6 +19,7 @@
     <Project Path="src/NetEvolve.Http.Correlation.Azure.Functions/NetEvolve.Http.Correlation.Azure.Functions.csproj" Id="639963ff-323b-4f12-804e-c1b97a2f1cf2" />
     <Project Path="src/NetEvolve.Http.Correlation.HttpClient/NetEvolve.Http.Correlation.HttpClient.csproj" />
     <Project Path="src/NetEvolve.Http.Correlation.TestGenerator/NetEvolve.Http.Correlation.TestGenerator.csproj" />
+    <Project Path="src/NetEvolve.Http.Correlation.Ulid.ByteAether/NetEvolve.Http.Correlation.Ulid.ByteAether.csproj" />
     <Project Path="src/NetEvolve.Http.Correlation.Ulid/NetEvolve.Http.Correlation.Ulid.csproj" />
   </Folder>
   <Folder Name="/tests/">
@@ -29,6 +30,7 @@
     <Project Path="tests/NetEvolve.Http.Correlation.Azure.Functions.Tests.Unit/NetEvolve.Http.Correlation.Azure.Functions.Tests.Unit.csproj" />
     <Project Path="tests/NetEvolve.Http.Correlation.HttpClient.Tests.Unit/NetEvolve.Http.Correlation.HttpClient.Tests.Unit.csproj" />
     <Project Path="tests/NetEvolve.Http.Correlation.TestGenerator.Tests.Unit/NetEvolve.Http.Correlation.TestGenerator.Tests.Unit.csproj" />
+    <Project Path="tests/NetEvolve.Http.Correlation.Ulid.ByteAether.Tests.Unit/NetEvolve.Http.Correlation.Ulid.ByteAether.Tests.Unit.csproj" />
     <Project Path="tests/NetEvolve.Http.Correlation.Ulid.Tests.Unit/NetEvolve.Http.Correlation.Ulid.Tests.Unit.csproj" />
   </Folder>
 </Solution>
