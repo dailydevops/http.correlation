@@ -1,11 +1,11 @@
-﻿namespace NetEvolve.Http.Correlation.Ulid.ByteAether.Tests.Unit;
+namespace NetEvolve.Http.Correlation.Ulid.ByteAether.Tests.Unit;
 
 using System.Linq;
 using System.Threading.Tasks;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
-public class ULIDCorrelationIdProviderTests
+public class UlidCorrelationIdProviderTests
 {
     [Test]
     public async Task GenerateId_Fact_Expected()
