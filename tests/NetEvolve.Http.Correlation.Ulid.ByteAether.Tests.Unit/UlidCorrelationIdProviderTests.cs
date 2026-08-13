@@ -1,11 +1,11 @@
-﻿namespace NetEvolve.Http.Correlation.Ulid.Tests.Unit;
+namespace NetEvolve.Http.Correlation.Ulid.ByteAether.Tests.Unit;
 
 using System.Linq;
 using System.Threading.Tasks;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
-public class ULIDCorrelationIdProviderTests
+public class UlidCorrelationIdProviderTests
 {
     [Test]
     public async Task GenerateId_Fact_Expected()
@@ -33,5 +33,23 @@ public class ULIDCorrelationIdProviderTests
 
         // Assert
         _ = await Assert.That(values.Distinct(StringComparer.Ordinal).Count()).IsEqualTo(numberOfIds);
+    }
+
+    [Test]
+    public async Task GenerateId_Sequential_Expected()
+    {
+        // Arrange
+        const int numberOfIds = 10_000;
+        var correlationIdProvider = new UlidCorrelationIdProvider();
+        var values = new string[numberOfIds];
+
+        // Act
+        _ = Enumerable.Range(0, numberOfIds).Select(i => values[i] = correlationIdProvider.GenerateId()).ToList();
+
+        // Assert
+        foreach (var id in values.Zip(values.Skip(1), (a, b) => (a, b)))
+        {
+            _ = await Assert.That(string.CompareOrdinal(id.a, id.b)).IsLessThan(0);
+        }
     }
 }

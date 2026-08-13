@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NetEvolve.Http.Correlation;
 using TUnit.Assertions.Extensions;
@@ -10,9 +11,11 @@ using TUnit.Core;
 public class HttpCorrelationMiddlewareTests : TestBase
 {
     [Test]
-    public async Task UseHttpCorrelation_WithoutGenerator_Expected()
+    public async Task UseHttpCorrelation_WithoutGenerator_Expected(CancellationToken cancellationToken = default)
     {
-        var result = await RunAsync().ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await RunAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -22,9 +25,15 @@ public class HttpCorrelationMiddlewareTests : TestBase
     }
 
     [Test]
-    public async Task UseHttpCorrelation_WithGenerator_Expected()
+    public async Task UseHttpCorrelation_WithGenerator_Expected(CancellationToken cancellationToken = default)
     {
-        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidGenerator()).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await RunAsync(
+                correlationBuilder: builder => builder.WithGuidGenerator(),
+                cancellationToken: cancellationToken
+            )
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -38,9 +47,15 @@ public class HttpCorrelationMiddlewareTests : TestBase
 
 #if NET9_0_OR_GREATER
     [Test]
-    public async Task UseHttpCorrelation_WithGuidV7Generator_Expected()
+    public async Task UseHttpCorrelation_WithGuidV7Generator_Expected(CancellationToken cancellationToken = default)
     {
-        var result = await RunAsync(correlationBuilder: builder => builder.WithGuidV7Generator()).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await RunAsync(
+                correlationBuilder: builder => builder.WithGuidV7Generator(),
+                cancellationToken: cancellationToken
+            )
+            .ConfigureAwait(false);
         using (Assert.Multiple())
         {
             _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
@@ -52,13 +67,16 @@ public class HttpCorrelationMiddlewareTests : TestBase
 #endif
 
     [Test]
-    public async Task UseHttpCorrelation_WithHeaderName1_Expected()
+    public async Task UseHttpCorrelation_WithHeaderName1_Expected(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var testCorrelationId = Guid.NewGuid().ToString("N");
         var result = await RunAsync(
                 clientConfiguration: client =>
                     client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName1, testCorrelationId),
-                requestPath: InvokePath
+                requestPath: InvokePath,
+                cancellationToken: cancellationToken
             )
             .ConfigureAwait(false);
 
@@ -69,17 +87,23 @@ public class HttpCorrelationMiddlewareTests : TestBase
                 .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
                 .IsEqualTo(testCorrelationId);
 
-            var correlationResult = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var correlationResult = await result
+                .Content.ReadAsStringAsync(cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             _ = await Assert.That(correlationResult).IsEqualTo(testCorrelationId);
         }
     }
 
     [Test]
-    public async Task UseHttpCorrelation_WithHeaderName2_Expected()
+    public async Task UseHttpCorrelation_WithHeaderName2_Expected(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var testCorrelationId = Guid.NewGuid().ToString("N");
-        var result = await RunAsync(clientConfiguration: client =>
-                client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId)
+        var result = await RunAsync(
+                clientConfiguration: client =>
+                    client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId),
+                cancellationToken: cancellationToken
             )
             .ConfigureAwait(false);
 

@@ -19,6 +19,8 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
     /// <inheritdoc />
     protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         SetCorrelationId(request);
 
         var response = base.Send(request, cancellationToken);
@@ -34,6 +36,8 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
         CancellationToken cancellationToken
     )
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         SetCorrelationId(request);
 
         var respose = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);

@@ -1,4 +1,4 @@
-namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
+﻿namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
 
 using System.Net;
 using System.Net.Http;
@@ -11,8 +11,10 @@ using TUnit.Core;
 public class HttpCorrelationIdHandlerTests
 {
     [Test]
-    public async Task Send_AddsCorrelationIdToRequest()
+    public async Task Send_AddsCorrelationIdToRequest(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
         var accessor = new TestCorrelationAccessor(correlationId, headerName);
@@ -22,7 +24,7 @@ public class HttpCorrelationIdHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
 #pragma warning disable CA1849,S6966,VSTHRD103 // Call async methods when in an async method
-        using var response = client.Send(request);
+        using var response = client.Send(request, cancellationToken: cancellationToken);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
         using (Assert.Multiple())
@@ -33,8 +35,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task Send_AddsCorrelationIdToResponse()
+    public async Task Send_AddsCorrelationIdToResponse(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
         var accessor = new TestCorrelationAccessor(correlationId, headerName);
@@ -44,7 +48,7 @@ public class HttpCorrelationIdHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
 #pragma warning disable CA1849, S6966, VSTHRD103 // Call async methods when in an async method
-        using var response = client.Send(request);
+        using var response = client.Send(request, cancellationToken: cancellationToken);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
         using (Assert.Multiple())
@@ -55,8 +59,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task Send_DoesNotOverrideExistingRequestHeader()
+    public async Task Send_DoesNotOverrideExistingRequestHeader(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
@@ -68,7 +74,7 @@ public class HttpCorrelationIdHandlerTests
         request.Headers.Add(headerName, existingCorrelationId);
 
 #pragma warning disable CA1849,S6966,VSTHRD103 // Call async methods when in an async method
-        using var response = client.Send(request);
+        using var response = client.Send(request, cancellationToken: cancellationToken);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
         using (Assert.Multiple())
@@ -80,8 +86,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task Send_DoesNotOverrideExistingResponseHeader()
+    public async Task Send_DoesNotOverrideExistingResponseHeader(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
@@ -95,7 +103,7 @@ public class HttpCorrelationIdHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
 #pragma warning disable CA1849,S6966,VSTHRD103 // Call async methods when in an async method
-        using var response = client.Send(request);
+        using var response = client.Send(request, cancellationToken: cancellationToken);
 #pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
 
         using (Assert.Multiple())
@@ -107,8 +115,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task SendAsync_AddsCorrelationIdToRequest()
+    public async Task SendAsync_AddsCorrelationIdToRequest(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
         var accessor = new TestCorrelationAccessor(correlationId, headerName);
@@ -117,7 +127,9 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request).ConfigureAwait(false);
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -127,8 +139,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task SendAsync_AddsCorrelationIdToResponse()
+    public async Task SendAsync_AddsCorrelationIdToResponse(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
         var accessor = new TestCorrelationAccessor(correlationId, headerName);
@@ -137,7 +151,9 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request).ConfigureAwait(false);
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -147,8 +163,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task SendAsync_DoesNotOverrideExistingRequestHeader()
+    public async Task SendAsync_DoesNotOverrideExistingRequestHeader(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
@@ -159,7 +177,9 @@ public class HttpCorrelationIdHandlerTests
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
         request.Headers.Add(headerName, existingCorrelationId);
 
-        using var response = await client.SendAsync(request).ConfigureAwait(false);
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -170,8 +190,10 @@ public class HttpCorrelationIdHandlerTests
     }
 
     [Test]
-    public async Task SendAsync_DoesNotOverrideExistingResponseHeader()
+    public async Task SendAsync_DoesNotOverrideExistingResponseHeader(CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
@@ -184,7 +206,9 @@ public class HttpCorrelationIdHandlerTests
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
-        using var response = await client.SendAsync(request).ConfigureAwait(false);
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
@@ -219,6 +243,8 @@ public class HttpCorrelationIdHandlerTests
 
         protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var response = new HttpResponseMessage(HttpStatusCode.OK);
 
             if (_correlationId is not null && _headerName is not null)
@@ -234,6 +260,8 @@ public class HttpCorrelationIdHandlerTests
             CancellationToken cancellationToken
         )
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var response = new HttpResponseMessage(HttpStatusCode.OK);
 
             if (_correlationId is not null && _headerName is not null)

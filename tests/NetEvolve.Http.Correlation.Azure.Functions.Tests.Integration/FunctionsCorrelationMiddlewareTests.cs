@@ -96,6 +96,49 @@ public class FunctionsCorrelationMiddlewareTests : TestBase
     }
 
     [Test]
+    public async Task UseHttpCorrelation_WithHeaderName1_WhitespaceValue_FallsBackToHeaderName2()
+    {
+        // Arrange
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+
+        // Act — HeaderName1 present but blank is treated as absent; HeaderName2 wins
+        var result = await RunAsync(requestSetup: req =>
+            {
+                req.Headers.Add(CorrelationConstants.HeaderName1, "   ");
+                req.Headers.Add(CorrelationConstants.HeaderName2, testCorrelationId);
+            })
+            .ConfigureAwait(false);
+
+        // Assert
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.NextCalled).IsTrue();
+            _ = await Assert.That(result.CorrelationId).IsEqualTo(testCorrelationId);
+            _ = await Assert.That(result.HeaderName).IsEqualTo(CorrelationConstants.HeaderName2);
+        }
+    }
+
+    [Test]
+    public async Task UseHttpCorrelation_WithHeaderName2_WhitespaceValue_FallsBackToInvocationId()
+    {
+        // Arrange / Act — both headers present but blank are treated as absent
+        var result = await RunAsync(requestSetup: req =>
+            {
+                req.Headers.Add(CorrelationConstants.HeaderName1, "   ");
+                req.Headers.Add(CorrelationConstants.HeaderName2, "   ");
+            })
+            .ConfigureAwait(false);
+
+        // Assert
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.NextCalled).IsTrue();
+            _ = await Assert.That(result.CorrelationId).IsEqualTo("test-invocation-id");
+            _ = await Assert.That(result.HeaderName).IsEqualTo(CorrelationConstants.HeaderName1);
+        }
+    }
+
+    [Test]
     public async Task UseHttpCorrelation_WithoutGenerator_FallsBackToInvocationId()
     {
         // Arrange / Act — no correlation header, no generator → falls back to InvocationId
