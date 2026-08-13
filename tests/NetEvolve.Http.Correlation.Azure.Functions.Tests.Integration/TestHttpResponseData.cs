@@ -15,7 +15,7 @@ internal sealed class TestHttpResponseData : HttpResponseData
 
     public override HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
 
-    public override HttpHeadersCollection Headers { get; set; } = new HttpHeadersCollection();
+    public override HttpHeadersCollection Headers { get; set; } = [];
 
     public override Stream Body { get; set; } = Stream.Null;
 

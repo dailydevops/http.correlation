@@ -12,12 +12,10 @@ using Microsoft.Azure.Functions.Worker.Http;
 /// </summary>
 public sealed class TestHttpRequestData : HttpRequestData
 {
-    private readonly HttpHeadersCollection _headers = new();
-
     public TestHttpRequestData(FunctionContext functionContext)
         : base(functionContext) { }
 
-    public override HttpHeadersCollection Headers => _headers;
+    public override HttpHeadersCollection Headers { get; } = [];
 
     public override IReadOnlyCollection<IHttpCookie> Cookies => [];
 

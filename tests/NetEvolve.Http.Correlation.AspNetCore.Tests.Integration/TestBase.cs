@@ -2,6 +2,7 @@
 
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,9 +22,12 @@ public abstract class TestBase
         Action<IHttpCorrelationBuilder>? correlationBuilder = null,
         Action<IServiceCollection>? serviceBuilder = null,
         Action<HttpClient>? clientConfiguration = null,
-        string requestPath = DefaultPath
+        string requestPath = DefaultPath,
+        CancellationToken cancellationToken = default
     )
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         using var host = new HostBuilder()
             .ConfigureServices(services =>
             {
@@ -59,15 +63,15 @@ public abstract class TestBase
                     });
             })
             .Build();
-        await host.StartAsync().ConfigureAwait(false);
+        await host.StartAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
         using var server = host.GetTestServer();
         using var client = server.CreateClient();
 
         clientConfiguration?.Invoke(client);
 
-        var response = await client.GetAsync(new Uri(requestPath, UriKind.Relative)).ConfigureAwait(false);
-
-        return response;
+        return await client
+            .GetAsync(new Uri(requestPath, UriKind.Relative), cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
     }
 }
