@@ -37,6 +37,6 @@
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.19" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.30" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.31" />
   </ItemGroup>
 </Project>
