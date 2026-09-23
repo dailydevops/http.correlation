@@ -56,4 +56,17 @@ public class FunctionsCorrelationAccessorTests
         // Assert
         _ = await Assert.That(result).IsEqualTo("second-invocation");
     }
+
+    [Test]
+    public async Task CorrelationId_Get_WithoutContext_ReturnsNull()
+    {
+        // Arrange — resolved outside of an invocation, the middleware never assigned a FunctionContext
+        var accessor = new FunctionsCorrelationAccessor();
+
+        // Act
+        var result = accessor.CorrelationId;
+
+        // Assert
+        _ = await Assert.That(result).IsNull();
+    }
 }
