@@ -81,7 +81,7 @@ public abstract class TestBase
 
     // The feature collection must stay typed as Mock<IInvocationFeatures>, not IInvocationFeatures: on the
     // interface type, Get<T>() is the real method returning T, so there is nothing to chain .Returns() onto.
-    private static void SetupHttpRequestFeature(
+    private protected static void SetupHttpRequestFeature(
         Mock<FunctionContext> context,
         Mock<IInvocationFeatures> features,
         TestHttpRequestData requestData

@@ -1,31 +1,33 @@
 ﻿namespace NetEvolve.Http.Correlation.HttpClient;
 
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using NetEvolve.Http.Correlation.Abstractions;
 
 /// <summary>
 /// a <see cref="DelegatingHandler"/> which implements the correlation id support,
-/// based on the <see cref="IHttpCorrelationAccessor"/> values.
+/// based on the correlation of the request currently in flight.
 /// </summary>
+/// <remarks>
+/// The handler is built and cached by <c>IHttpClientFactory</c> in its own dependency injection scope and shared
+/// across requests, so it reads the correlation per call from <see cref="CorrelationContext"/> instead of holding
+/// a request scoped service. Without a request in flight it leaves the headers untouched.
+/// </remarks>
 internal sealed class HttpCorrelationIdHandler : DelegatingHandler
 {
-    private readonly IHttpCorrelationAccessor _correlationAccessor;
-
-    public HttpCorrelationIdHandler(IHttpCorrelationAccessor correlationAccessor) =>
-        _correlationAccessor = correlationAccessor;
-
     /// <inheritdoc />
     protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        SetCorrelationId(request);
+        var correlation = CorrelationContext.Current;
+
+        SetCorrelationId(request.Headers, correlation);
 
         var response = base.Send(request, cancellationToken);
 
-        SetCorrelationId(response);
+        SetCorrelationId(response.Headers, correlation);
 
         return response;
     }
@@ -38,34 +40,27 @@ internal sealed class HttpCorrelationIdHandler : DelegatingHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        SetCorrelationId(request);
+        var correlation = CorrelationContext.Current;
 
-        var respose = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        SetCorrelationId(request.Headers, correlation);
 
-        SetCorrelationId(respose);
+        var response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-        return respose;
+        SetCorrelationId(response.Headers, correlation);
+
+        return response;
     }
 
-    private void SetCorrelationId(HttpRequestMessage request)
+    private static void SetCorrelationId(HttpHeaders headers, CorrelationSnapshot? correlation)
     {
-        var correlationId = _correlationAccessor.CorrelationId;
-        var correlationHeader = _correlationAccessor.HeaderName;
-
-        if (!request.Headers.Contains(correlationHeader))
+        if (correlation is null || string.IsNullOrWhiteSpace(correlation.CorrelationId))
         {
-            request.Headers.Add(correlationHeader, correlationId);
+            return;
         }
-    }
 
-    private void SetCorrelationId(HttpResponseMessage respose)
-    {
-        var correlationId = _correlationAccessor.CorrelationId;
-        var correlationHeader = _correlationAccessor.HeaderName;
-
-        if (!respose.Headers.Contains(correlationHeader))
+        if (!headers.Contains(correlation.HeaderName))
         {
-            respose.Headers.Add(correlationHeader, correlationId);
+            headers.Add(correlation.HeaderName, correlation.CorrelationId);
         }
     }
 }

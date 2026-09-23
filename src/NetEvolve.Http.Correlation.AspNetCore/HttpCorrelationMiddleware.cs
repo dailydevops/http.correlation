@@ -52,6 +52,9 @@ internal sealed class HttpCorrelationMiddleware
         var accessor = context.RequestServices.GetService<IHttpCorrelationAccessor>()!;
         accessor.HeaderName = usedHeaderName;
 
+        // Scoped to this asynchronous flow: visible to everything the request awaits, gone once this method returns.
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, usedHeaderName));
+
         var scopeProperties = new Dictionary<string, object>(StringComparer.Ordinal)
         {
             { usedHeaderName, correlationId },
