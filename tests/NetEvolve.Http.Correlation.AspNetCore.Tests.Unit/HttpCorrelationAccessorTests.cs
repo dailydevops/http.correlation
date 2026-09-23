@@ -53,4 +53,59 @@ public class HttpCorrelationAccessorTests
         // Assert
         _ = await Assert.That(result).IsNull();
     }
+
+    [Test]
+    public async Task CorrelationId_Get_AfterHttpContextChanged_ReturnsCurrentTraceIdentifier()
+    {
+        // Arrange — one instance outlives its request (#859), e.g. captured by a cached handler chain (#858)
+        var httpContextAccessor = new HttpContextAccessor
+        {
+            HttpContext = new DefaultHttpContext { TraceIdentifier = "first-request" },
+        };
+        var accessor = new HttpCorrelationAccessor(httpContextAccessor);
+        _ = accessor.CorrelationId;
+
+        // Act
+        httpContextAccessor.HttpContext = new DefaultHttpContext { TraceIdentifier = "second-request" };
+        var result = accessor.CorrelationId;
+
+        // Assert
+        _ = await Assert.That(result).IsEqualTo("second-request");
+    }
+
+    [Test]
+    public async Task CorrelationId_Get_AfterHttpContextCleared_ReturnsNull()
+    {
+        // Arrange
+        var httpContextAccessor = new HttpContextAccessor
+        {
+            HttpContext = new DefaultHttpContext { TraceIdentifier = "finished-request" },
+        };
+        var accessor = new HttpCorrelationAccessor(httpContextAccessor);
+        _ = accessor.CorrelationId;
+
+        // Act — the request is over, no HttpContext is in flight any more
+        httpContextAccessor.HttpContext = null;
+        var result = accessor.CorrelationId;
+
+        // Assert
+        _ = await Assert.That(result).IsNull();
+    }
+
+    [Test]
+    public async Task CorrelationId_Get_AfterTraceIdentifierChanged_ReturnsCurrentTraceIdentifier()
+    {
+        // Arrange — read before HttpCorrelationMiddleware replaced the TraceIdentifier with the correlation id
+        var httpContext = new DefaultHttpContext { TraceIdentifier = "server-trace-id" };
+        var httpContextAccessor = new HttpContextAccessor { HttpContext = httpContext };
+        var accessor = new HttpCorrelationAccessor(httpContextAccessor);
+        _ = accessor.CorrelationId;
+
+        // Act
+        httpContext.TraceIdentifier = "incoming-correlation-id";
+        var result = accessor.CorrelationId;
+
+        // Assert
+        _ = await Assert.That(result).IsEqualTo("incoming-correlation-id");
+    }
 }

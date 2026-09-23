@@ -10,6 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.AspNetCore\NetEvolve.Http.Correlation.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\NetEvolve.Http.Correlation.HttpClient\NetEvolve.Http.Correlation.HttpClient.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="NetEvolve.Extensions.TUnit.IntegrationTestAttribute" />
