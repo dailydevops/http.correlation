@@ -41,6 +41,9 @@ internal sealed class FunctionsCorrelationMiddleware : IFunctionsWorkerMiddlewar
         accessor.CorrelationId = correlationId;
         accessor.HeaderName = usedHeaderName;
 
+        // Scoped to this asynchronous flow: visible to everything the invocation awaits, gone once this method returns.
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, usedHeaderName));
+
         var scopeProperties = new Dictionary<string, object>(StringComparer.Ordinal)
         {
             { usedHeaderName, correlationId },

@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using NetEvolve.Http.Correlation.Abstractions;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
 
@@ -17,9 +16,9 @@ public class HttpCorrelationIdHandlerTests
 
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
@@ -41,9 +40,9 @@ public class HttpCorrelationIdHandlerTests
 
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
@@ -66,9 +65,9 @@ public class HttpCorrelationIdHandlerTests
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
         request.Headers.Add(headerName, existingCorrelationId);
@@ -93,9 +92,9 @@ public class HttpCorrelationIdHandlerTests
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor)
+        using var handler = new HttpCorrelationIdHandler()
         {
             InnerHandler = new TestMessageHandler(existingCorrelationId, headerName),
         };
@@ -121,9 +120,9 @@ public class HttpCorrelationIdHandlerTests
 
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
@@ -145,9 +144,9 @@ public class HttpCorrelationIdHandlerTests
 
         var correlationId = "test-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
 
@@ -170,9 +169,9 @@ public class HttpCorrelationIdHandlerTests
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor) { InnerHandler = new TestMessageHandler() };
+        using var handler = new HttpCorrelationIdHandler() { InnerHandler = new TestMessageHandler() };
         using var client = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
         request.Headers.Add(headerName, existingCorrelationId);
@@ -197,9 +196,9 @@ public class HttpCorrelationIdHandlerTests
         var correlationId = "test-correlation-id";
         var existingCorrelationId = "existing-correlation-id";
         var headerName = "X-Correlation-ID";
-        var accessor = new TestCorrelationAccessor(correlationId, headerName);
+        CorrelationContext.Set(new CorrelationSnapshot(correlationId, headerName));
 
-        using var handler = new HttpCorrelationIdHandler(accessor)
+        using var handler = new HttpCorrelationIdHandler()
         {
             InnerHandler = new TestMessageHandler(existingCorrelationId, headerName),
         };
@@ -218,15 +217,52 @@ public class HttpCorrelationIdHandlerTests
         }
     }
 
-    private sealed class TestCorrelationAccessor : IHttpCorrelationAccessor
+    [Test]
+    public async Task SendAsync_WithoutCorrelation_AddsNoHeader(CancellationToken cancellationToken = default)
     {
-        public string CorrelationId { get; set; }
-        public string HeaderName { get; set; }
+        cancellationToken.ThrowIfCancellationRequested();
 
-        public TestCorrelationAccessor(string correlationId, string headerName)
+        CorrelationContext.Set(null);
+
+        using var handler = new HttpCorrelationIdHandler { InnerHandler = new TestMessageHandler() };
+        using var client = new HttpClient(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
+
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        using (Assert.Multiple())
         {
-            CorrelationId = correlationId;
-            HeaderName = headerName;
+            _ = await Assert.That(request.Headers.Contains(CorrelationConstants.HeaderName1)).IsFalse();
+            _ = await Assert.That(request.Headers.Contains(CorrelationConstants.HeaderName2)).IsFalse();
+            _ = await Assert.That(response.Headers.Contains(CorrelationConstants.HeaderName1)).IsFalse();
+        }
+    }
+
+    [Test]
+    public async Task SendAsync_WithAlternativeHeader_UsesAlternativeHeader(
+        CancellationToken cancellationToken = default
+    )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        CorrelationContext.Set(new CorrelationSnapshot("alternative-id", CorrelationConstants.HeaderName2));
+
+        using var handler = new HttpCorrelationIdHandler { InnerHandler = new TestMessageHandler() };
+        using var client = new HttpClient(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
+
+        using var response = await client
+            .SendAsync(request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert
+                .That(request.Headers.GetValues(CorrelationConstants.HeaderName2))
+                .Contains("alternative-id");
+            _ = await Assert.That(request.Headers.Contains(CorrelationConstants.HeaderName1)).IsFalse();
         }
     }
 

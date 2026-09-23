@@ -7,7 +7,7 @@ using NetEvolve.Http.Correlation.Abstractions;
 internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private string? _correlationId;
+    private string? _explicitCorrelationId;
 
     public HttpCorrelationAccessor(IHttpContextAccessor httpContextAccessor) =>
         _httpContextAccessor = httpContextAccessor;
@@ -15,8 +15,9 @@ internal sealed class HttpCorrelationAccessor : IHttpCorrelationAccessor
     /// <inheritdoc />
     public string CorrelationId
     {
-        get => _correlationId ??= _httpContextAccessor.HttpContext?.TraceIdentifier!;
-        set => _correlationId = value;
+        // Read live on every access: an instance that outlives its request must not keep answering for it.
+        get => _explicitCorrelationId ?? _httpContextAccessor.HttpContext?.TraceIdentifier!;
+        set => _explicitCorrelationId = value;
     }
 
     /// <inheritdoc />

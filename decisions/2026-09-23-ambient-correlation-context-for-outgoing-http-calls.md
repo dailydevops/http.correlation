@@ -12,7 +12,7 @@ created: 2026-09-23
 
 lastModified: 2026-09-23
 
-state: proposed
+state: accepted
 
 instructions: |
   Outgoing correlation (HttpCorrelationIdHandler) MUST NOT capture IHttpCorrelationAccessor or any other scoped service through its constructor, because IHttpClientFactory builds and caches handlers in its own DI scope.
@@ -49,13 +49,13 @@ The consequences depend on the host.
 
 The Functions case is not described in #858. It shows that the fix proposed in the issue, which resolves through `IHttpContextAccessor`, is not enough. The isolated worker has no `HttpContext` unless ASP.NET Core integration is used. `AddHttpCorrelation()` for Functions does not register `IHttpContextAccessor` either.
 
-### Reproduction (tests added on this branch)
+### Reproduction
 
-All tests below go through the real `IHttpClientFactory` pipeline. They use `AddHttpClient(...).WithHttpCorrelation()` with a recording primary handler, and keep one host or provider alive across several requests, as in production. Each test is red on the current code and defines the target behaviour.
+All tests below go through the real `IHttpClientFactory` pipeline. They use `AddHttpClient(...).WithHttpCorrelation()` with a recording primary handler, and keep one host or provider alive across several requests, as in production. Each test was red before the fix and defines the target behaviour; all of them pass with the decision below.
 
 `tests/NetEvolve.Http.Correlation.AspNetCore.Tests.Integration/HttpClientForwardingTests.cs`
 
-| Test | Current result |
+| Test | Result before the fix |
 | --- | --- |
 | `SendAsync_SequentialRequests_ForwardEachRequestsOwnCorrelationId` | forwarded `[First, First]` |
 | `Send_SequentialRequests_ForwardEachRequestsOwnCorrelationId` (sync path) | forwarded `[First, First]` |
@@ -67,7 +67,7 @@ All tests below go through the real `IHttpClientFactory` pipeline. They use `Add
 
 `tests/NetEvolve.Http.Correlation.Azure.Functions.Tests.Integration/HttpClientForwardingTests.cs`
 
-| Test | Current result |
+| Test | Result before the fix |
 | --- | --- |
 | `SendAsync_SingleInvocation_ForwardsInvocationCorrelationId` | `NullReferenceException` |
 | `SendAsync_SequentialInvocations_ForwardEachInvocationsOwnCorrelationId` | `NullReferenceException` |
@@ -76,7 +76,7 @@ All tests below go through the real `IHttpClientFactory` pipeline. They use `Add
 
 Accessor memoisation (#859):
 
-| Test | Current result |
+| Test | Result before the fix |
 | --- | --- |
 | `HttpCorrelationAccessorTests.CorrelationId_Get_AfterHttpContextChanged_ReturnsCurrentTraceIdentifier` | returns the first request's id |
 | `HttpCorrelationAccessorTests.CorrelationId_Get_AfterHttpContextCleared_ReturnsNull` | returns the finished request's id |
@@ -87,7 +87,7 @@ Accessor memoisation (#859):
 
 ### Other captures checked
 
-`HttpCorrelationIdHandler` is the only type in this repository that receives a scoped service and is cached by `IHttpClientFactory`. Both middlewares resolve the accessor per invocation, from `HttpContext.RequestServices` and `FunctionContext.InstanceServices`. If a consumer sets `HttpClientFactoryOptions.SuppressHandlerScope = true`, the handler is resolved from the root provider instead. That is the same bug in a different form, and the proposed design is immune to it as well.
+`HttpCorrelationIdHandler` is the only type in this repository that receives a scoped service and is cached by `IHttpClientFactory`. Both middlewares resolve the accessor per invocation, from `HttpContext.RequestServices` and `FunctionContext.InstanceServices`. If a consumer sets `HttpClientFactoryOptions.SuppressHandlerScope = true`, the handler is resolved from the root provider instead. That is the same bug in a different form, and the chosen design is immune to it as well.
 
 ## Decision
 
@@ -106,7 +106,7 @@ internal static class CorrelationContext
 
     public static CorrelationSnapshot? Current => _current.Value;
 
-    internal static void Set(CorrelationSnapshot? snapshot) => _current.Value = snapshot;
+    public static void Set(CorrelationSnapshot? snapshot) => _current.Value = snapshot;
 }
 ```
 
