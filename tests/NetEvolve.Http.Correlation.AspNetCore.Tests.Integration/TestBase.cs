@@ -22,6 +22,7 @@ public abstract class TestBase
         Action<IHttpCorrelationBuilder>? correlationBuilder = null,
         Action<IServiceCollection>? serviceBuilder = null,
         Action<HttpClient>? clientConfiguration = null,
+        Action<HttpRequest>? requestConfiguration = null,
         string requestPath = DefaultPath,
         CancellationToken cancellationToken = default
     )
@@ -41,7 +42,14 @@ public abstract class TestBase
                     .UseTestServer()
                     .Configure(app =>
                     {
-                        _ = app.UseHttpCorrelation()
+                        _ = app.Use(
+                                (context, next) =>
+                                {
+                                    requestConfiguration?.Invoke(context.Request);
+                                    return next(context);
+                                }
+                            )
+                            .UseHttpCorrelation()
                             .UseRouting()
                             .UseEndpoints(endpoints =>
                             {
