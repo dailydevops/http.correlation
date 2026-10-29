@@ -54,6 +54,41 @@ public class FunctionsCorrelationMiddlewareTests : TestBase
     }
 
     [Test]
+    public async Task UseHttpCorrelation_WithHttpResponse_AddsCorrelationHeader()
+    {
+        // Arrange
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+
+        // Act
+        var result = await RunAsync(requestSetup: req =>
+                req.Headers.Add(CorrelationConstants.HeaderName2, testCorrelationId)
+            )
+            .ConfigureAwait(false);
+
+        // Assert
+        var values = result.Response!.Headers.GetValues(CorrelationConstants.HeaderName2);
+        _ = await Assert.That(values).IsEquivalentTo([testCorrelationId]);
+    }
+
+    [Test]
+    public async Task UseHttpCorrelation_WithExistingResponseHeader_DoesNotOverwrite()
+    {
+        // Arrange
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+
+        // Act
+        var result = await RunAsync(
+                requestSetup: req => req.Headers.Add(CorrelationConstants.HeaderName1, testCorrelationId),
+                responseSetup: res => res.Headers.Add(CorrelationConstants.HeaderName1, "preset")
+            )
+            .ConfigureAwait(false);
+
+        // Assert
+        var values = result.Response!.Headers.GetValues(CorrelationConstants.HeaderName1);
+        _ = await Assert.That(values).IsEquivalentTo(["preset"]);
+    }
+
+    [Test]
     public async Task UseHttpCorrelation_WithHeaderName1_Expected()
     {
         // Arrange
