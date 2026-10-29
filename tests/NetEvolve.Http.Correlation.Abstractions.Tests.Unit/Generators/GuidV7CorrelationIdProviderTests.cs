@@ -17,7 +17,9 @@ public sealed class GuidV7CorrelationIdProviderTests
         // Act
         var id = provider.GenerateId();
         // Assert
-        _ = await Assert.That(id).IsNotEqualTo($"{Guid.Empty:N}");
+        _ = await Assert.That(Guid.TryParseExact(id, "N", out var guid)).IsTrue();
+        _ = await Assert.That(guid).IsNotEqualTo(Guid.Empty);
+        _ = await Assert.That(guid.Version).IsEqualTo(7);
     }
 }
 #endif
