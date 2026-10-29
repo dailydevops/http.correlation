@@ -1,6 +1,7 @@
 ﻿namespace NetEvolve.Http.Correlation.Azure.Functions.Tests.Integration;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -185,4 +186,27 @@ public class FunctionsCorrelationMiddlewareTests : TestBase
         }
     }
 #endif
+
+    [Test]
+    [Arguments(CorrelationConstants.HeaderName1)]
+    [Arguments(CorrelationConstants.HeaderName2)]
+    public async Task UseHttpCorrelation_LogScope_ContainsUsedHeaderAndCorrelationId(string headerName)
+    {
+        // Arrange
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+        using var provider = new ScopeCapturingLoggerProvider();
+
+        // Act
+        _ = await RunAsync(
+                serviceBuilder: services => services.AddSingleton<ILoggerProvider>(provider),
+                requestSetup: req => req.Headers.Add(headerName, testCorrelationId)
+            )
+            .ConfigureAwait(false);
+
+        // Assert
+        var scope = await Assert.That(provider.Scopes).HasSingleItem();
+        _ = await Assert
+            .That(scope!)
+            .IsEquivalentTo(new Dictionary<string, object> { [headerName] = testCorrelationId });
+    }
 }

@@ -1,9 +1,12 @@
 ﻿namespace NetEvolve.Http.Correlation.AspNetCore.Tests.Integration;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NetEvolve.Http.Correlation;
 using TUnit.Assertions.Extensions;
 using TUnit.Core;
@@ -114,5 +117,31 @@ public class HttpCorrelationMiddlewareTests : TestBase
                 .That(result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault())
                 .IsEqualTo(testCorrelationId);
         }
+    }
+
+    [Test]
+    [Arguments(CorrelationConstants.HeaderName1)]
+    [Arguments(CorrelationConstants.HeaderName2)]
+    public async Task UseHttpCorrelation_LogScope_ContainsUsedHeaderAndCorrelationId(
+        string headerName,
+        CancellationToken cancellationToken = default
+    )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+        using var provider = new ScopeCapturingLoggerProvider();
+
+        _ = await RunAsync(
+                serviceBuilder: services => services.AddSingleton<ILoggerProvider>(provider),
+                clientConfiguration: client => client.DefaultRequestHeaders.Add(headerName, testCorrelationId),
+                cancellationToken: cancellationToken
+            )
+            .ConfigureAwait(false);
+
+        var scope = await Assert.That(provider.Scopes).HasSingleItem();
+        _ = await Assert
+            .That(scope!)
+            .IsEquivalentTo(new Dictionary<string, object> { [headerName] = testCorrelationId });
     }
 }
