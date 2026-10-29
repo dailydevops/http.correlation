@@ -141,7 +141,9 @@ public class HttpCorrelationMiddlewareTests : TestBase
 
         var scope = await Assert.That(provider.Scopes).HasSingleItem();
         _ = await Assert
-            .That(scope!)
-            .IsEquivalentTo(new Dictionary<string, object> { [headerName] = testCorrelationId });
+            .That(scope)
+            .IsEquivalentTo(
+                new Dictionary<string, object>(StringComparer.Ordinal) { [headerName] = testCorrelationId }
+            );
     }
 }
