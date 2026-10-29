@@ -158,7 +158,7 @@ public class HttpCorrelationMiddlewareTests : TestBase
         var result = await RunAsync(
                 clientConfiguration: client =>
                     client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId),
-                requestConfiguration: request => request.Headers.Add(CorrelationConstants.HeaderName1, string.Empty),
+                requestConfiguration: request => request.Headers[CorrelationConstants.HeaderName1] = string.Empty,
                 cancellationToken: cancellationToken
             )
             .ConfigureAwait(false);
@@ -179,7 +179,7 @@ public class HttpCorrelationMiddlewareTests : TestBase
         cancellationToken.ThrowIfCancellationRequested();
 
         var result = await RunAsync(
-                requestConfiguration: request => request.Headers.Add(CorrelationConstants.HeaderName2, string.Empty),
+                requestConfiguration: request => request.Headers[CorrelationConstants.HeaderName2] = string.Empty,
                 cancellationToken: cancellationToken
             )
             .ConfigureAwait(false);
