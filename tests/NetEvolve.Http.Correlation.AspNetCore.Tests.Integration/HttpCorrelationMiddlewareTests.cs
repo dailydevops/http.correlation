@@ -115,4 +115,51 @@ public class HttpCorrelationMiddlewareTests : TestBase
                 .IsEqualTo(testCorrelationId);
         }
     }
+
+    [Test]
+    public async Task UseHttpCorrelation_WithEmptyHeaderName1AndHeaderName2_Expected(
+        CancellationToken cancellationToken = default
+    )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var testCorrelationId = Guid.NewGuid().ToString("N");
+        var result = await RunAsync(
+                clientConfiguration: client =>
+                    client.DefaultRequestHeaders.Add(CorrelationConstants.HeaderName2, testCorrelationId),
+                requestConfiguration: request => request.Headers.Add(CorrelationConstants.HeaderName1, string.Empty),
+                cancellationToken: cancellationToken
+            )
+            .ConfigureAwait(false);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsFalse();
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName2)).IsTrue();
+            _ = await Assert
+                .That(result.Headers.GetValues(CorrelationConstants.HeaderName2).FirstOrDefault())
+                .IsEqualTo(testCorrelationId);
+        }
+    }
+
+    [Test]
+    public async Task UseHttpCorrelation_WithEmptyHeaderName2_Expected(CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await RunAsync(
+                requestConfiguration: request => request.Headers.Add(CorrelationConstants.HeaderName2, string.Empty),
+                cancellationToken: cancellationToken
+            )
+            .ConfigureAwait(false);
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName2)).IsFalse();
+            _ = await Assert.That(result.Headers.Contains(CorrelationConstants.HeaderName1)).IsTrue();
+            _ = await Assert
+                .That(result.Headers.GetValues(CorrelationConstants.HeaderName1).FirstOrDefault())
+                .IsNotNullOrEmpty();
+        }
+    }
 }
