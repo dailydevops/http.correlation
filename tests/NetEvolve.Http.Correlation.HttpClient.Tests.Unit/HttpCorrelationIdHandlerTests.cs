@@ -1,5 +1,6 @@
 ﻿namespace NetEvolve.Http.Correlation.HttpClient.Tests.Unit;
 
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -265,6 +266,76 @@ public class HttpCorrelationIdHandlerTests
             _ = await Assert.That(request.Headers.Contains(CorrelationConstants.HeaderName1)).IsFalse();
         }
     }
+
+    [Test]
+    public async Task Send_WithCancelledToken_Throws()
+    {
+        CorrelationContext.Set(new CorrelationSnapshot("test-correlation-id", "X-Correlation-ID"));
+
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync().ConfigureAwait(false);
+
+        var inner = new TokenIgnoringMessageHandler();
+        using var handler = new HttpCorrelationIdHandler { InnerHandler = inner };
+        using var invoker = new HttpMessageInvoker(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
+
+#pragma warning disable CA1849,S6966,VSTHRD103 // Call async methods when in an async method
+        _ = await Assert.That(() => invoker.Send(request, cts.Token)).Throws<OperationCanceledException>();
+#pragma warning restore CA1849,S6966,VSTHRD103 // Call async methods when in an async method
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(inner.CallCount).IsEqualTo(0);
+            _ = await Assert.That(request.Headers.Contains("X-Correlation-ID")).IsFalse();
+        }
+    }
+
+    [Test]
+    public async Task SendAsync_WithCancelledToken_Throws()
+    {
+        CorrelationContext.Set(new CorrelationSnapshot("test-correlation-id", "X-Correlation-ID"));
+
+        using var cts = new CancellationTokenSource();
+        await cts.CancelAsync().ConfigureAwait(false);
+
+        var inner = new TokenIgnoringMessageHandler();
+        using var handler = new HttpCorrelationIdHandler { InnerHandler = inner };
+        using var invoker = new HttpMessageInvoker(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost/test");
+
+        _ = await Assert
+            .That(async () => await invoker.SendAsync(request, cts.Token).ConfigureAwait(false))
+            .Throws<OperationCanceledException>();
+
+        using (Assert.Multiple())
+        {
+            _ = await Assert.That(inner.CallCount).IsEqualTo(0);
+            _ = await Assert.That(request.Headers.Contains("X-Correlation-ID")).IsFalse();
+        }
+    }
+
+#pragma warning disable NE0009 // Intentionally ignores the token to prove the handler guards itself
+    private sealed class TokenIgnoringMessageHandler : HttpMessageHandler
+    {
+        public int CallCount { get; private set; }
+
+        protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            CallCount++;
+            return new HttpResponseMessage(HttpStatusCode.OK);
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
+        {
+            CallCount++;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK));
+        }
+    }
+#pragma warning restore NE0009
 
     private sealed class TestMessageHandler : HttpMessageHandler
     {
