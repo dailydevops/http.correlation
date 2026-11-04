@@ -20,7 +20,8 @@ public abstract class TestBase
     protected static async ValueTask<TestRunResult> RunAsync(
         Action<IHttpCorrelationBuilder>? correlationBuilder = null,
         Action<IServiceCollection>? serviceBuilder = null,
-        Action<TestHttpRequestData>? requestSetup = null
+        Action<TestHttpRequestData>? requestSetup = null,
+        Action<HttpResponseData>? responseSetup = null
     )
     {
         var services = new ServiceCollection().AddLogging();
@@ -40,42 +41,61 @@ public abstract class TestBase
             {
                 _ = context.InstanceServices.Returns(scope.ServiceProvider);
 
-                // Always required: FunctionContextHttpRequestExtensions.GetHttpRequestDataAsync() dereferences
-                // context.Features directly (no null-check), so an unconfigured (null) Features property throws
-                // even when there is no HTTP request to set up.
-                //
-                // Requires TUnit.Mocks >= 1.63.0: the middleware always calls context.GetInvocationResult(), which
-                // internally requests the *internal* Worker type IFunctionBindingsFeature via Get<T>(). Only from
-                // 1.63.0 on does the generated mock auto-stub a T this assembly cannot name; on 1.62.0 the call
-                // returns null and GetRequired<T>() throws "No feature is registered with the type ...".
-                var features = IInvocationFeatures.Mock();
-                _ = context.Features.Returns(features);
-
-                if (requestSetup is not null)
-                {
-                    var requestData = new TestHttpRequestData(context);
-                    requestSetup(requestData);
-                    SetupHttpRequestFeature(context, features, requestData);
-                }
+                SetupFeatures(context, requestSetup);
 
                 var middleware = new FunctionsCorrelationMiddleware(
                     scope.ServiceProvider.GetRequiredService<ILogger<FunctionsCorrelationMiddleware>>()
                 );
 
                 var nextCalled = false;
+                HttpResponseData? response = null;
 
                 await middleware.Invoke(context, next).ConfigureAwait(false);
 
                 var functionsAccessor = scope.ServiceProvider.GetRequiredService<FunctionsCorrelationAccessor>();
 
-                return new TestRunResult(nextCalled, functionsAccessor.CorrelationId, functionsAccessor.HeaderName);
+                return new TestRunResult(
+                    nextCalled,
+                    functionsAccessor.CorrelationId,
+                    functionsAccessor.HeaderName,
+                    response
+                );
 
-                Task next(FunctionContext _)
+                Task next(FunctionContext ctx)
                 {
                     nextCalled = true;
+                    if (requestSetup is not null)
+                    {
+                        // The function's HTTP response, which the middleware decorates with the correlation header.
+                        response = new TestHttpResponseData(ctx);
+                        responseSetup?.Invoke(response);
+                        ctx.GetInvocationResult().Value = response;
+                    }
+
                     return Task.CompletedTask;
                 }
             }
+        }
+    }
+
+    private static void SetupFeatures(Mock<FunctionContext> context, Action<TestHttpRequestData>? requestSetup)
+    {
+        // Always required: FunctionContextHttpRequestExtensions.GetHttpRequestDataAsync() dereferences
+        // context.Features directly (no null-check), so an unconfigured (null) Features property throws
+        // even when there is no HTTP request to set up.
+        //
+        // Requires TUnit.Mocks >= 1.63.0: the middleware always calls context.GetInvocationResult(), which
+        // internally requests the *internal* Worker type IFunctionBindingsFeature via Get<T>(). Only from
+        // 1.63.0 on does the generated mock auto-stub a T this assembly cannot name; on 1.62.0 the call
+        // returns null and GetRequired<T>() throws "No feature is registered with the type ...".
+        var features = IInvocationFeatures.Mock();
+        _ = context.Features.Returns(features);
+
+        if (requestSetup is not null)
+        {
+            var requestData = new TestHttpRequestData(context);
+            requestSetup(requestData);
+            SetupHttpRequestFeature(context, features, requestData);
         }
     }
 

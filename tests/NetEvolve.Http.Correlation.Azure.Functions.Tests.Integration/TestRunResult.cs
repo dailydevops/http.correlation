@@ -3,4 +3,9 @@
 /// <summary>
 /// The result of a test run through <see cref="FunctionsCorrelationMiddleware"/>.
 /// </summary>
-public sealed record TestRunResult(bool NextCalled, string CorrelationId, string HeaderName);
+public sealed record TestRunResult(
+    bool NextCalled,
+    string CorrelationId,
+    string HeaderName,
+    Microsoft.Azure.Functions.Worker.Http.HttpResponseData? Response = null
+);
