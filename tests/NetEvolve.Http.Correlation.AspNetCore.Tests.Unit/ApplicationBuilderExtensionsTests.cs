@@ -33,7 +33,10 @@ public class ApplicationBuilderExtensionsTests
         var builder = new ApplicationBuilder(provider);
 
         // Act / Assert
-        _ = await Assert.That(() => builder.UseHttpCorrelation()).Throws<InvalidOperationException>();
+        _ = await Assert
+            .That(() => builder.UseHttpCorrelation())
+            .Throws<InvalidOperationException>()
+            .WithMessageContaining("AddHttpCorrelation", StringComparison.Ordinal);
     }
 
     [Test]

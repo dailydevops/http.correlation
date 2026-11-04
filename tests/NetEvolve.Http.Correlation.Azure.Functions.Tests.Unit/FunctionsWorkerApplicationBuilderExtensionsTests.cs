@@ -33,7 +33,10 @@ public class FunctionsWorkerApplicationBuilderExtensionsTests
         _ = builder.Services.Returns(services);
 
         // Act / Assert
-        _ = await Assert.That(() => builder.UseHttpCorrelation()).Throws<InvalidOperationException>();
+        _ = await Assert
+            .That(() => builder.UseHttpCorrelation())
+            .Throws<InvalidOperationException>()
+            .WithMessageContaining("AddHttpCorrelation", StringComparison.Ordinal);
     }
 
     [Test]
