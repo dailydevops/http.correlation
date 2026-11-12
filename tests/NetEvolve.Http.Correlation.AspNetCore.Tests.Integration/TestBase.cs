@@ -53,12 +53,10 @@ public abstract class TestBase
                             .UseRouting()
                             .UseEndpoints(endpoints =>
                             {
-                                _ = endpoints.MapGet(
-                                    DefaultPath,
-                                    async context =>
-                                        await context
-                                            .Response.WriteAsync("Hello World!", context.RequestAborted)
-                                            .ConfigureAwait(false)
+                                _ = endpoints.MapGet(DefaultPath, async context =>
+                                    await context
+                                        .Response.WriteAsync("Hello World!", context.RequestAborted)
+                                        .ConfigureAwait(false)
                                 );
                                 _ = endpoints.MapGet(
                                     InvokePath,
