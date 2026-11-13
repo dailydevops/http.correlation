@@ -7,8 +7,8 @@
     <GlobalPackageReference Include="CSharpier.MSBuild" Version="1.4.0" />
     <GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.325" />
     <GlobalPackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="5.6.0" />
-    <GlobalPackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.403" />
-    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.403" />
+    <GlobalPackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.404" />
+    <GlobalPackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.404" />
     <GlobalPackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="18.12.1" />
     <GlobalPackageReference Include="NetEvolve.Analyzer" Version="0.20.92" />
     <GlobalPackageReference Include="NetEvolve.Defaults" Version="2.10.80" />
@@ -20,8 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Core" Version="2.52.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.15" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
     <PackageVersion Include="NetEvolve.Extensions.TUnit" Version="3.5.658" />
     <PackageVersion Include="TUnit" Version="1.81.16" />
@@ -30,10 +30,10 @@
     <PackageVersion Include="ByteAether.Ulid" Version="1.4.2" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0'">
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.15" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0'">
-    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.22" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="9.0.23" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.34" />
